@@ -1,5 +1,34 @@
 const DUEDECK_HOST_ID = "duedeck-overlay-host";
 const OPEN_ATTRIBUTE = "data-open";
+const LEGACY_STORAGE_KEY = "duedeckOverlayLayout";
+const STORAGE_KEY = "duedeckPanelLayout";
+
+const DEFAULT_LAYOUT = {
+    panelHeight: 660,
+    panelWidth: 352,
+    panelX: null,
+    panelY: null,
+};
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+function getStoredLayout() {
+    return new Promise((resolve) => {
+        chrome.storage?.local?.get([STORAGE_KEY, LEGACY_STORAGE_KEY], (result) => {
+            resolve({
+                ...DEFAULT_LAYOUT,
+                ...(result?.[LEGACY_STORAGE_KEY] || {}),
+                ...(result?.[STORAGE_KEY] || {}),
+            });
+        });
+    });
+}
+
+function setStoredLayout(layout) {
+    chrome.storage?.local?.set({ [STORAGE_KEY]: layout });
+}
 
 function isLikelyCanvasPage() {
     const hostname = window.location.hostname.toLowerCase();
@@ -44,11 +73,151 @@ async function createShadowContent(shadowRoot) {
     shadowRoot.append(style, template.content.cloneNode(true));
 }
 
-function bindOverlayControls(host, shadowRoot) {
-    const dock = shadowRoot.querySelector("[data-dock]");
-    const closeButton = shadowRoot.querySelector("[data-close]");
+function applyLayout(host, panel, layout) {
+    const maxPanelWidth = Math.max(280, window.innerWidth - 28);
+    const maxPanelHeight = Math.max(420, window.innerHeight - 42);
+    const panelWidth = clamp(layout.panelWidth, 300, Math.min(430, maxPanelWidth));
+    const panelHeight = clamp(layout.panelHeight, 500, Math.min(760, maxPanelHeight));
+    const defaultPanelX = window.innerWidth - panelWidth - 16;
+    const defaultPanelY = (window.innerHeight - panelHeight) / 2;
+    const panelX = clamp(layout.panelX ?? defaultPanelX, 12, window.innerWidth - panelWidth - 12);
+    const panelY = clamp(layout.panelY ?? defaultPanelY, 12, window.innerHeight - panelHeight - 12);
 
-    dock?.addEventListener("click", () => {
+    layout.panelHeight = panelHeight;
+    layout.panelWidth = panelWidth;
+    layout.panelX = panelX;
+    layout.panelY = panelY;
+
+    panel.style.left = `${panelX}px`;
+    panel.style.top = `${panelY}px`;
+    panel.style.width = `${panelWidth}px`;
+    panel.style.height = `${panelHeight}px`;
+}
+
+function bindPanelDrag(panel, layout) {
+    const dragHandle = panel.querySelector("[data-panel-drag]");
+    let dragState = null;
+
+    dragHandle?.addEventListener("pointerdown", (event) => {
+        if (event.target.closest("button")) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        dragHandle.setPointerCapture(event.pointerId);
+
+        dragState = {
+            startPointerX: event.clientX,
+            startPointerY: event.clientY,
+            startX: layout.panelX ?? panel.getBoundingClientRect().left,
+            startY: layout.panelY ?? panel.getBoundingClientRect().top,
+        };
+    });
+
+    dragHandle?.addEventListener("pointermove", (event) => {
+        if (!dragState) return;
+
+        const panelWidth = panel.getBoundingClientRect().width;
+        const panelHeight = panel.getBoundingClientRect().height;
+        const nextX = clamp(
+            dragState.startX + event.clientX - dragState.startPointerX,
+            12,
+            window.innerWidth - panelWidth - 12
+        );
+        const nextY = clamp(
+            dragState.startY + event.clientY - dragState.startPointerY,
+            12,
+            window.innerHeight - panelHeight - 12
+        );
+
+        layout.panelX = nextX;
+        layout.panelY = nextY;
+        panel.style.left = `${nextX}px`;
+        panel.style.top = `${nextY}px`;
+    });
+
+    dragHandle?.addEventListener("pointerup", (event) => {
+        if (!dragState) return;
+
+        dragHandle.releasePointerCapture(event.pointerId);
+        dragState = null;
+        setStoredLayout(layout);
+    });
+
+    dragHandle?.addEventListener("pointercancel", () => {
+        dragState = null;
+        setStoredLayout(layout);
+    });
+}
+
+function bindPanelResize(panel, layout) {
+    const resizeHandle = panel.querySelector("[data-resize-handle]");
+    let resizeState = null;
+
+    resizeHandle?.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        resizeHandle.setPointerCapture(event.pointerId);
+
+        const panelRect = panel.getBoundingClientRect();
+        resizeState = {
+            startHeight: panelRect.height,
+            startLeft: panelRect.left,
+            startPointerX: event.clientX,
+            startPointerY: event.clientY,
+            startRight: panelRect.right,
+            startWidth: panelRect.width,
+        };
+    });
+
+    resizeHandle?.addEventListener("pointermove", (event) => {
+        if (!resizeState) return;
+
+        const maxPanelWidth = Math.min(430, window.innerWidth - 28);
+        const maxPanelHeight = Math.min(760, window.innerHeight - 42);
+        const nextWidth = clamp(
+            resizeState.startWidth + resizeState.startPointerX - event.clientX,
+            300,
+            maxPanelWidth
+        );
+        const nextHeight = clamp(
+            resizeState.startHeight + event.clientY - resizeState.startPointerY,
+            500,
+            maxPanelHeight
+        );
+        const nextX = clamp(
+            resizeState.startRight - nextWidth,
+            12,
+            window.innerWidth - nextWidth - 12
+        );
+
+        layout.panelWidth = nextWidth;
+        layout.panelHeight = nextHeight;
+        layout.panelX = nextX;
+        panel.style.width = `${nextWidth}px`;
+        panel.style.height = `${nextHeight}px`;
+        panel.style.left = `${nextX}px`;
+    });
+
+    resizeHandle?.addEventListener("pointerup", (event) => {
+        if (!resizeState) return;
+
+        resizeHandle.releasePointerCapture(event.pointerId);
+        resizeState = null;
+        setStoredLayout(layout);
+    });
+
+    resizeHandle?.addEventListener("pointercancel", () => {
+        resizeState = null;
+        setStoredLayout(layout);
+    });
+}
+
+function bindOverlayControls(host, shadowRoot, layout) {
+    const launcher = shadowRoot.querySelector("[data-launcher]");
+    const closeButton = shadowRoot.querySelector("[data-close]");
+    const panel = shadowRoot.querySelector("[data-panel]");
+
+    launcher?.addEventListener("click", () => {
         host.setAttribute(OPEN_ATTRIBUTE, "true");
     });
 
@@ -61,6 +230,15 @@ function bindOverlayControls(host, shadowRoot) {
             host.removeAttribute(OPEN_ATTRIBUTE);
         }
     });
+
+    if (panel) {
+        bindPanelDrag(panel, layout);
+        bindPanelResize(panel, layout);
+        window.addEventListener("resize", () => {
+            applyLayout(host, panel, layout);
+            setStoredLayout(layout);
+        });
+    }
 }
 
 async function mountDueDeck() {
@@ -72,7 +250,14 @@ async function mountDueDeck() {
     const shadowRoot = host.attachShadow({ mode: "open" });
 
     await createShadowContent(shadowRoot);
-    bindOverlayControls(host, shadowRoot);
+    const layout = await getStoredLayout();
+    const panel = shadowRoot.querySelector("[data-panel]");
+
+    if (panel) {
+        applyLayout(host, panel, layout);
+    }
+
+    bindOverlayControls(host, shadowRoot, layout);
 
     document.documentElement.append(host);
 }

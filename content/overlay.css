@@ -1,11 +1,11 @@
 :host {
   all: initial;
   position: fixed;
-  top: 50%;
-  right: 0;
+  inset: 0;
   z-index: 2147483647;
   color: #151827;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  pointer-events: none;
 }
 
 *,
@@ -18,9 +18,9 @@ button {
   font: inherit;
 }
 
-.duedeck-dock {
-  position: absolute;
-  top: 0;
+.duedeck-launcher {
+  position: fixed;
+  top: 50%;
   right: 0;
   width: 24px;
   height: 150px;
@@ -31,32 +31,33 @@ button {
   background: linear-gradient(180deg, #8b5cf6 0%, #4c1d95 100%);
   box-shadow: 0 18px 44px rgba(49, 46, 129, 0.24);
   cursor: pointer;
+  pointer-events: auto;
   transform: translate(12px, -50%);
   transition: opacity 140ms ease, transform 180ms ease, width 180ms ease, box-shadow 180ms ease;
 }
 
-.duedeck-dock:hover,
-.duedeck-dock:focus-visible {
+.duedeck-launcher:hover,
+.duedeck-launcher:focus-visible {
   width: 30px;
   transform: translate(0, -50%);
   outline: none;
   box-shadow: 0 22px 58px rgba(49, 46, 129, 0.32);
 }
 
-:host([data-open="true"]) .duedeck-dock {
+:host([data-open="true"]) .duedeck-launcher {
   opacity: 0;
   pointer-events: none;
   transform: translate(8px, -50%) scaleY(0.96);
 }
 
 .duedeck-panel {
-  position: absolute;
-  top: 0;
-  right: 12px;
+  position: fixed;
+  top: 50%;
+  left: auto;
   display: grid;
   grid-template-rows: auto 1fr auto;
   width: min(352px, calc(100vw - 28px));
-  min-height: min(660px, calc(100vh - 42px));
+  height: min(660px, calc(100vh - 42px));
   max-height: calc(100vh - 42px);
   overflow: hidden;
   border: 1px solid rgba(124, 58, 237, 0.16);
@@ -65,7 +66,7 @@ button {
   box-shadow: 0 24px 88px rgba(30, 27, 75, 0.22);
   opacity: 0;
   pointer-events: none;
-  transform: translate(12px, -50%) scaleX(0.05) scaleY(0.38);
+  transform: translateX(18px) scaleX(0.05) scaleY(0.38);
   transform-origin: right center;
   transition: opacity 80ms ease, transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 240ms ease;
 }
@@ -73,7 +74,7 @@ button {
 :host([data-open="true"]) .duedeck-panel {
   opacity: 1;
   pointer-events: auto;
-  transform: translate(0, -50%) scale(1);
+  transform: translateX(0) scale(1);
 }
 
 .duedeck-panel__header {
@@ -82,6 +83,13 @@ button {
   justify-content: space-between;
   gap: 12px;
   padding: 20px 20px 14px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.duedeck-panel__header:active {
+  cursor: grabbing;
 }
 
 .duedeck-panel__eyebrow {
@@ -181,6 +189,15 @@ button {
   padding: 0 18px 20px;
 }
 
+.duedeck-panel__resize {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  cursor: nesw-resize;
+}
+
 .duedeck-week-button {
   display: flex;
   align-items: center;
@@ -205,17 +222,9 @@ button {
 }
 
 @media (max-width: 520px) {
-  :host {
-    top: auto;
-    bottom: 96px;
-  }
-
   .duedeck-panel {
-    top: auto;
-    right: 12px;
-    bottom: -72px;
     width: calc(100vw - 24px);
-    min-height: min(620px, calc(100vh - 36px));
+    height: min(620px, calc(100vh - 36px));
     transform: translateX(18px) scaleX(0.08) scaleY(0.34);
   }
 

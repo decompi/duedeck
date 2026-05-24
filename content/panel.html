@@ -1,8 +1,8 @@
-<button class="duedeck-dock" data-dock type="button" aria-label="Open DueDeck">
+<button class="duedeck-launcher" data-launcher type="button" aria-label="Open DueDeck">
 </button>
 
 <aside class="duedeck-panel" data-panel aria-label="DueDeck panel">
-    <header class="duedeck-panel__header">
+    <header class="duedeck-panel__header" data-panel-drag>
         <div>
             <p class="duedeck-panel__eyebrow">DueDeck</p>
             <h2 class="duedeck-panel__title">Assignments</h2>
@@ -60,4 +60,6 @@
             Open Week View
         </button>
     </footer>
+
+    <span class="duedeck-panel__resize" data-resize-handle aria-hidden="true"></span>
 </aside>
