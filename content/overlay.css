@@ -23,11 +23,11 @@ button {
   top: 0;
   right: 0;
   width: 24px;
-  height: 178px;
+  height: 150px;
   padding: 0;
   border: 1px solid rgba(109, 40, 217, 0.2);
   border-right: 0;
-  border-radius: 18px 0 0 18px;
+  border-radius: 16px 0 0 16px;
   background: linear-gradient(180deg, #8b5cf6 0%, #4c1d95 100%);
   box-shadow: 0 18px 44px rgba(49, 46, 129, 0.24);
   cursor: pointer;
@@ -46,7 +46,7 @@ button {
 :host([data-open="true"]) .duedeck-dock {
   opacity: 0;
   pointer-events: none;
-  transform: translate(8px, -50%) scaleY(0.94);
+  transform: translate(8px, -50%) scaleY(0.96);
 }
 
 .duedeck-panel {
@@ -55,8 +55,8 @@ button {
   right: 12px;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  width: min(400px, calc(100vw - 30px));
-  min-height: 528px;
+  width: min(352px, calc(100vw - 28px));
+  min-height: min(660px, calc(100vh - 42px));
   max-height: calc(100vh - 42px);
   overflow: hidden;
   border: 1px solid rgba(124, 58, 237, 0.16);
@@ -65,7 +65,7 @@ button {
   box-shadow: 0 24px 88px rgba(30, 27, 75, 0.22);
   opacity: 0;
   pointer-events: none;
-  transform: translate(18px, -50%) scaleX(0.08) scaleY(0.34);
+  transform: translate(12px, -50%) scaleX(0.05) scaleY(0.38);
   transform-origin: right center;
   transition: opacity 80ms ease, transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 240ms ease;
 }
@@ -140,15 +140,15 @@ button {
 .duedeck-panel__body {
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 18px;
+  gap: 16px;
   min-height: 0;
-  padding: 8px 20px 18px;
+  padding: 8px 18px 18px;
 }
 
 .duedeck-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .duedeck-stat {
@@ -173,12 +173,12 @@ button {
 }
 
 .duedeck-list {
-  min-height: 230px;
+  min-height: 340px;
   border-top: 1px solid #eceef5;
 }
 
 .duedeck-panel__footer {
-  padding: 0 20px 20px;
+  padding: 0 18px 20px;
 }
 
 .duedeck-week-button {
@@ -215,7 +215,7 @@ button {
     right: 12px;
     bottom: -72px;
     width: calc(100vw - 24px);
-    min-height: 468px;
+    min-height: min(620px, calc(100vh - 36px));
     transform: translateX(18px) scaleX(0.08) scaleY(0.34);
   }
 
