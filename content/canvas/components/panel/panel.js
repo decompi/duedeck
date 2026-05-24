@@ -198,20 +198,27 @@ export function bindDrawer(shadowRoot, panel, layout, stats, initialTriageState,
         }
     }
 
+    function isResolvedExpanded() {
+        const list = drawerList.querySelector(".duedeck-resolved__list");
+        return list ? !list.hidden : false;
+    }
+
     function onTriage(id, status) {
+        const wasExpanded = isResolvedExpanded();
         triage[id] = status;
         saveTriageState(triage);
         updateOverdueStatCard();
         drawerBadge.textContent = getUnresolvedCount();
-        renderOverdueDrawer(drawerList, stats.overdueItems, triage, onTriage, onUndo);
+        renderOverdueDrawer(drawerList, stats.overdueItems, triage, onTriage, onUndo, wasExpanded);
     }
 
     function onUndo(id) {
+        const wasExpanded = isResolvedExpanded();
         delete triage[id];
         saveTriageState(triage);
         updateOverdueStatCard();
         drawerBadge.textContent = getUnresolvedCount();
-        renderOverdueDrawer(drawerList, stats.overdueItems, triage, onTriage, onUndo);
+        renderOverdueDrawer(drawerList, stats.overdueItems, triage, onTriage, onUndo, wasExpanded);
     }
 
     function positionDrawer() {

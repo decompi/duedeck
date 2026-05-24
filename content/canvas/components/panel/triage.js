@@ -102,11 +102,11 @@ function createResolvedItem(assignment, status, onUndo) {
     return item;
 }
 
-function createResolvedSection(resolved, triageState, onUndo) {
+function createResolvedSection(resolved, triageState, onUndo, startExpanded = false) {
     const section = document.createElement("div");
     section.className = "duedeck-resolved";
 
-    let isExpanded = false;
+    let isExpanded = startExpanded;
 
     const toggle = document.createElement("button");
     toggle.type = "button";
@@ -124,7 +124,8 @@ function createResolvedSection(resolved, triageState, onUndo) {
 
     const list = document.createElement("div");
     list.className = "duedeck-resolved__list";
-    list.hidden = true;
+    list.hidden = !isExpanded;
+    chevron.textContent = isExpanded ? "▾" : "▸";
 
     resolved.forEach(a => {
         list.append(createResolvedItem(a, triageState[a.id], onUndo));
@@ -140,7 +141,7 @@ function createResolvedSection(resolved, triageState, onUndo) {
     return section;
 }
 
-export function renderOverdueDrawer(root, assignments, triageState, onTriage, onUndo) {
+export function renderOverdueDrawer(root, assignments, triageState, onTriage, onUndo, expandResolved = false) {
     const unresolved = assignments.filter(a => !triageState[a.id]);
     const resolved = assignments.filter(a => !!triageState[a.id]);
 
@@ -171,6 +172,6 @@ export function renderOverdueDrawer(root, assignments, triageState, onTriage, on
     }
 
     if (resolved.length > 0) {
-        root.append(createResolvedSection(resolved, triageState, onUndo));
+        root.append(createResolvedSection(resolved, triageState, onUndo, expandResolved));
     }
 }
