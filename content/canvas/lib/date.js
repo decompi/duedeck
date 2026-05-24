@@ -30,7 +30,7 @@ export function formatDueDate(isoString) {
     if (due < dayAfterStart) return "Tomorrow";
 
     if (due - now < 7 * DAY_MS) {
-        return due.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+        return due.toLocaleDateString([], { weekday: "long" });
     }
 
     return due.toLocaleDateString([], { month: "short", day: "numeric" });
