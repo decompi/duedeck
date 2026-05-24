@@ -27,7 +27,18 @@ function getStoredLayout() {
 }
 
 function setStoredLayout(layout) {
-    chrome.storage?.local?.set({ [STORAGE_KEY]: layout });
+    try {
+        chrome.storage?.local?.set({ [STORAGE_KEY]: layout });
+    } catch {
+        // Extension context was invalidated (e.g. reloaded while tab was open)
+    }
+}
+
+function getGreeting() {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
 }
 
 function isLikelyCanvasPage() {
@@ -264,6 +275,9 @@ async function mountDueDeckCanvasPanel() {
     if (panel) {
         applyLayout(host, panel, layout);
     }
+
+    const greeting = shadowRoot.querySelector(".duedeck-greeting");
+    if (greeting) greeting.textContent = `${getGreeting()}, Matin`;
 
     renderUpNextAssignments(shadowRoot.querySelector("[data-up-next-list]"));
 

@@ -174,14 +174,14 @@
 
 .duedeck-up-next {
   min-height: 0;
+  overflow: hidden;
 }
 
 .duedeck-section-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 10px;
-  border-top: 1px solid #eceef5;
+  padding: 10px 0;
   border-bottom: 1px solid #eceef5;
 }
 
@@ -209,7 +209,7 @@
 
 .duedeck-assignment {
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr) 30px;
+  grid-template-columns: 72px minmax(0, 1fr) 28px;
   align-items: center;
   gap: 12px;
   min-height: 76px;
@@ -263,21 +263,43 @@
   place-items: center;
   width: 23px;
   height: 23px;
+  overflow: hidden;
   border-radius: 999px;
 }
 
 .duedeck-assignment__badge--canvas {
-  background:
-    radial-gradient(circle at center, transparent 31%, #ff1f1f 33% 42%, transparent 44%),
-    conic-gradient(#ff1f1f 0 10%, transparent 10% 18%, #ff1f1f 18% 28%, transparent 28% 36%, #ff1f1f 36% 46%, transparent 46% 54%, #ff1f1f 54% 64%, transparent 64% 72%, #ff1f1f 72% 82%, transparent 82% 90%, #ff1f1f 90% 100%);
+  background: #e33f32;
+  color: #fff;
 }
 
 .duedeck-assignment__badge--pearson {
   background: #087f9a;
   color: #fff;
+}
+
+.duedeck-assignment__badge img {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.duedeck-assignment__badge--has-logo {
+  background: transparent;
+}
+
+.duedeck-assignment__badge--has-logo img {
+  display: block;
+}
+
+.duedeck-assignment__badge--has-logo .duedeck-assignment__badge-fallback {
+  display: none;
+}
+
+.duedeck-assignment__badge-fallback {
   font-size: 15px;
   font-weight: 820;
-  font-family: Georgia, serif;
+  line-height: 1;
 }
 
 .duedeck-next-class {

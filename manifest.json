@@ -27,7 +27,9 @@
         "content/canvas/components/launcher/launcher.html",
         "content/canvas/components/panel/panel.css",
         "content/canvas/components/panel/panel.html",
-        "content/canvas/components/up-next/up-next.js"
+        "content/canvas/components/up-next/up-next.js",
+        "assets/platforms/canvas.svg",
+        "assets/platforms/pearson.svg"
       ],
       "matches": [
         "https://*/*"

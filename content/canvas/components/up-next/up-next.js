@@ -25,14 +25,43 @@ const SAMPLE_ASSIGNMENTS = [
     },
 ];
 
+const PLATFORM_LOGOS = {
+    canvas: {
+        fallback: "C",
+        path: "assets/platforms/canvas.svg",
+    },
+    pearson: {
+        fallback: "P",
+        path: "assets/platforms/pearson.svg",
+    },
+};
+
 function createPlatformBadge(assignment) {
     const badge = document.createElement("span");
     badge.className = `duedeck-assignment__badge duedeck-assignment__badge--${assignment.platformType}`;
     badge.setAttribute("aria-label", assignment.platform);
 
-    if (assignment.platformType === "pearson") {
-        badge.textContent = "P";
+    const logo = PLATFORM_LOGOS[assignment.platformType];
+
+    if (!logo) {
+        return badge;
     }
+
+    const fallback = document.createElement("span");
+    fallback.className = "duedeck-assignment__badge-fallback";
+    fallback.textContent = logo.fallback;
+
+    const image = document.createElement("img");
+    image.alt = "";
+    image.addEventListener("load", () => {
+        badge.classList.add("duedeck-assignment__badge--has-logo");
+    });
+    image.addEventListener("error", () => {
+        image.remove();
+    });
+    image.src = chrome.runtime.getURL(logo.path);
+
+    badge.append(image, fallback);
 
     return badge;
 }
