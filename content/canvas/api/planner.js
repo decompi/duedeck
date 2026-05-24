@@ -17,7 +17,9 @@ export async function fetchCurrentUser() {
         credentials: "same-origin",
         headers: { Accept: "application/json+canvas-string-ids, application/json" },
     });
-    if (!response.ok) throw new Error(`Canvas API ${response.status}`);
+    if (!response.ok) {
+        throw new Error(`Canvas API ${response.status}`);
+    }
     const { short_name, name } = await response.json();
     const display = short_name || name || "";
     return display.split(" ")[0] || null;
@@ -59,7 +61,9 @@ export async function fetchUpcomingAssignments({ limit = 10 } = {}) {
         headers: { Accept: "application/json+canvas-string-ids, application/json" },
     });
 
-    if (!response.ok) throw new Error(`Canvas API ${response.status}`);
+    if (!response.ok) {
+        throw new Error(`Canvas API ${response.status}`);
+    }
 
     const items = await response.json();
 
@@ -100,7 +104,9 @@ export async function fetchAssignmentStats() {
         headers: { Accept: "application/json+canvas-string-ids, application/json" },
     });
 
-    if (!response.ok) throw new Error(`Canvas API ${response.status}`);
+    if (!response.ok) {
+        throw new Error(`Canvas API ${response.status}`);
+    }
 
     const items = await response.json();
     const now = new Date();
@@ -124,7 +130,18 @@ export async function fetchAssignmentStats() {
         return due < todayStart;
     }).length;
 
-    return { dueToday, overdue };
+    const overdueItems = unsubmitted
+        .filter(item => new Date(item.plannable?.due_at ?? item.plannable_date) < todayStart)
+        .map(toAssignment);
+
+    const dueTodayItems = unsubmitted
+        .filter(item => {
+            const due = new Date(item.plannable?.due_at ?? item.plannable_date);
+            return due >= todayStart && due <= todayEnd;
+        })
+        .map(toAssignment);
+
+    return { dueToday, overdue, overdueItems, dueTodayItems };
 }
 
 function toAssignment(item) {

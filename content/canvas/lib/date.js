@@ -8,7 +8,9 @@ function startOfDay(date) {
 }
 
 export function formatDueDate(isoString) {
-    if (!isoString) return "No due date";
+    if (!isoString) {
+        return "No due date";
+    }
 
     const due = new Date(isoString);
     const now = new Date();
@@ -18,8 +20,12 @@ export function formatDueDate(isoString) {
 
     if (due < now) {
         const daysAgo = Math.floor((now - due) / DAY_MS);
-        if (daysAgo === 0) return "Due tonight";
-        if (daysAgo === 1) return "Yesterday";
+        if (daysAgo === 0) {
+            return "Due tonight";
+        }
+        if (daysAgo === 1) {
+            return "Yesterday";
+        }
         return `${daysAgo}d overdue`;
     }
 
@@ -27,7 +33,9 @@ export function formatDueDate(isoString) {
         return due.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     }
 
-    if (due < dayAfterStart) return "Tomorrow";
+    if (due < dayAfterStart) {
+        return "Tomorrow";
+    }
 
     if (due - now < 7 * DAY_MS) {
         return due.toLocaleDateString([], { weekday: "long" });
@@ -37,9 +45,15 @@ export function formatDueDate(isoString) {
 }
 
 export function getTimeTone(isoString) {
-    if (!isoString) return "normal";
+    if (!isoString) {
+        return "normal";
+    }
     const diff = new Date(isoString) - Date.now();
-    if (diff < 0) return "overdue";
-    if (diff < HOUR_MS * 24) return "urgent";
+    if (diff < 0) {
+        return "overdue";
+    }
+    if (diff < HOUR_MS * 24) {
+        return "urgent";
+    }
     return "normal";
 }

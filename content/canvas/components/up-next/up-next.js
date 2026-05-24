@@ -10,7 +10,9 @@ function createPlatformBadge(assignment) {
     badge.setAttribute("aria-label", assignment.platform);
 
     const logo = PLATFORM_LOGOS[assignment.platformType];
-    if (!logo) return badge;
+    if (!logo) {
+        return badge;
+    }
 
     const fallback = document.createElement("span");
     fallback.className = "duedeck-assignment__badge-fallback";
@@ -56,6 +58,52 @@ function createUpNextItem(assignment) {
 }
 
 
+function createDrawerItem(assignment, type) {
+    const item = document.createElement("button");
+    item.className = "duedeck-drawer__item";
+    item.type = "button";
+
+    if (assignment.url) {
+        item.addEventListener("click", () => window.open(assignment.url, "_blank", "noopener"));
+    }
+
+    const badge = createPlatformBadge(assignment);
+    badge.style.cssText = "width:22px;height:22px;flex-shrink:0";
+
+    const info = document.createElement("div");
+    info.className = "duedeck-drawer__item-info";
+
+    const title = document.createElement("span");
+    title.className = "duedeck-drawer__item-title";
+    title.textContent = assignment.title;
+
+    const course = document.createElement("span");
+    course.className = "duedeck-drawer__item-course";
+    course.textContent = assignment.course;
+
+    const time = document.createElement("span");
+    time.className = `duedeck-drawer__item-time duedeck-drawer__item-time--${type}`;
+    time.textContent = assignment.time;
+
+    info.append(title, course, time);
+    item.append(badge, info);
+    return item;
+}
+
+export function renderDrawerItems(root, assignments, type) {
+    if (!root) {
+        return;
+    }
+    if (!assignments?.length) {
+        const msg = document.createElement("p");
+        msg.className = "duedeck-drawer__empty";
+        msg.textContent = "All clear!";
+        root.replaceChildren(msg);
+        return;
+    }
+    root.replaceChildren(...assignments.map(a => createDrawerItem(a, type)));
+}
+
 function createSkeletonItem() {
     const item = document.createElement("div");
     item.className = "duedeck-assignment duedeck-assignment--skeleton";
@@ -92,13 +140,17 @@ function createStatusMessage(text) {
 
 
 export function renderUpNextLoading(root) {
-    if (!root) return;
+    if (!root) {
+        return;
+    }
     root.setAttribute("aria-busy", "true");
     root.replaceChildren(...Array.from({ length: 3 }, createSkeletonItem));
 }
 
 export function renderUpNextAssignments(root, assignments) {
-    if (!root) return;
+    if (!root) {
+        return;
+    }
     root.removeAttribute("aria-busy");
 
     if (!assignments?.length) {
@@ -110,7 +162,9 @@ export function renderUpNextAssignments(root, assignments) {
 }
 
 export function renderUpNextError(root) {
-    if (!root) return;
+    if (!root) {
+        return;
+    }
     root.removeAttribute("aria-busy");
     root.replaceChildren(createStatusMessage("Couldn't load assignments."));
 }
