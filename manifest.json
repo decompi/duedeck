@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "DueDeck",
+  "version": "0.1.0",
+  "description": "A unified assignment dashboard for college deadlines.",
+  "action": {
+    "default_title": "DueDeck"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/overlay.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content/overlay.css", "content/panel.html"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": ["activeTab", "scripting", "storage"]
+}

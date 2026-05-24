@@ -1,0 +1,215 @@
+:host {
+  all: initial;
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 2147483647;
+  color: #151827;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button {
+  font: inherit;
+}
+
+.duedeck-dock {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 136px;
+  padding: 0;
+  border: 1px solid rgba(109, 40, 217, 0.18);
+  border-right: 0;
+  border-radius: 24px 0 0 24px;
+  background: linear-gradient(180deg, #7c3aed 0%, #4c1d95 100%);
+  box-shadow: 0 18px 44px rgba(49, 46, 129, 0.24);
+  cursor: pointer;
+  transform: translate(18px, -50%);
+  transition: transform 150ms ease, width 150ms ease, box-shadow 150ms ease;
+}
+
+.duedeck-dock:hover,
+.duedeck-dock:focus-visible,
+:host([data-open="true"]) .duedeck-dock {
+  width: 44px;
+  transform: translate(0, -50%);
+  outline: none;
+  box-shadow: 0 22px 58px rgba(49, 46, 129, 0.32);
+}
+
+.duedeck-panel {
+  position: absolute;
+  top: -218px;
+  right: 20px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(400px, calc(100vw - 30px));
+  min-height: 528px;
+  max-height: calc(100vh - 42px);
+  overflow: hidden;
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.99);
+  box-shadow: 0 24px 88px rgba(30, 27, 75, 0.22);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(22px) scale(0.985);
+  transform-origin: right center;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+:host([data-open="true"]) .duedeck-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+}
+
+.duedeck-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 14px;
+}
+
+.duedeck-panel__eyebrow {
+  margin: 0 0 3px;
+  color: #7c3aed;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.duedeck-panel__title {
+  margin: 0;
+  color: #151827;
+  font-size: 22px;
+  font-weight: 820;
+  letter-spacing: 0;
+}
+
+.duedeck-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.duedeck-icon-button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 12px;
+  background: #f7f5ff;
+  color: #5b6172;
+  cursor: pointer;
+}
+
+.duedeck-icon-button:hover,
+.duedeck-icon-button:focus-visible {
+  background: #ede9fe;
+  color: #5b21b6;
+  outline: none;
+}
+
+.duedeck-icon-button svg,
+.duedeck-week-button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.duedeck-panel__body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 18px;
+  min-height: 0;
+  padding: 8px 20px 18px;
+}
+
+.duedeck-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.duedeck-stat {
+  height: 88px;
+  border: 1px solid rgba(124, 58, 237, 0.06);
+  border-radius: 18px;
+  background: #f8f7fc;
+  color: #51586b;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 760;
+  text-align: left;
+  padding: 16px;
+}
+
+.duedeck-stat--today {
+  background: linear-gradient(135deg, #f7f5ff 0%, #fbfbff 100%);
+}
+
+.duedeck-stat--overdue {
+  background: linear-gradient(135deg, #fff1f6 0%, #fffafa 100%);
+}
+
+.duedeck-list {
+  min-height: 230px;
+  border-top: 1px solid #eceef5;
+}
+
+.duedeck-panel__footer {
+  padding: 0 20px 20px;
+}
+
+.duedeck-week-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 820;
+  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.24);
+}
+
+.duedeck-week-button:hover,
+.duedeck-week-button:focus-visible {
+  background: linear-gradient(135deg, #5b21b6 0%, #4338ca 100%);
+  outline: none;
+}
+
+@media (max-width: 520px) {
+  :host {
+    top: auto;
+    bottom: 96px;
+  }
+
+  .duedeck-panel {
+    top: auto;
+    right: 12px;
+    bottom: -72px;
+    width: calc(100vw - 24px);
+    min-height: 468px;
+  }
+}
