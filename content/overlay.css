@@ -22,32 +22,37 @@ button {
   position: absolute;
   top: 0;
   right: 0;
-  width: 36px;
-  height: 136px;
+  width: 24px;
+  height: 178px;
   padding: 0;
-  border: 1px solid rgba(109, 40, 217, 0.18);
+  border: 1px solid rgba(109, 40, 217, 0.2);
   border-right: 0;
-  border-radius: 24px 0 0 24px;
-  background: linear-gradient(180deg, #7c3aed 0%, #4c1d95 100%);
+  border-radius: 18px 0 0 18px;
+  background: linear-gradient(180deg, #8b5cf6 0%, #4c1d95 100%);
   box-shadow: 0 18px 44px rgba(49, 46, 129, 0.24);
   cursor: pointer;
-  transform: translate(18px, -50%);
-  transition: transform 150ms ease, width 150ms ease, box-shadow 150ms ease;
+  transform: translate(12px, -50%);
+  transition: opacity 140ms ease, transform 180ms ease, width 180ms ease, box-shadow 180ms ease;
 }
 
 .duedeck-dock:hover,
-.duedeck-dock:focus-visible,
-:host([data-open="true"]) .duedeck-dock {
-  width: 44px;
+.duedeck-dock:focus-visible {
+  width: 30px;
   transform: translate(0, -50%);
   outline: none;
   box-shadow: 0 22px 58px rgba(49, 46, 129, 0.32);
 }
 
+:host([data-open="true"]) .duedeck-dock {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(8px, -50%) scaleY(0.94);
+}
+
 .duedeck-panel {
   position: absolute;
-  top: -218px;
-  right: 20px;
+  top: 0;
+  right: 12px;
   display: grid;
   grid-template-rows: auto 1fr auto;
   width: min(400px, calc(100vw - 30px));
@@ -60,15 +65,15 @@ button {
   box-shadow: 0 24px 88px rgba(30, 27, 75, 0.22);
   opacity: 0;
   pointer-events: none;
-  transform: translateX(22px) scale(0.985);
+  transform: translate(18px, -50%) scaleX(0.08) scaleY(0.34);
   transform-origin: right center;
-  transition: opacity 150ms ease, transform 150ms ease;
+  transition: opacity 80ms ease, transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 240ms ease;
 }
 
 :host([data-open="true"]) .duedeck-panel {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(0) scale(1);
+  transform: translate(0, -50%) scale(1);
 }
 
 .duedeck-panel__header {
@@ -211,5 +216,10 @@ button {
     bottom: -72px;
     width: calc(100vw - 24px);
     min-height: 468px;
+    transform: translateX(18px) scaleX(0.08) scaleY(0.34);
+  }
+
+  :host([data-open="true"]) .duedeck-panel {
+    transform: translateX(0) scale(1);
   }
 }

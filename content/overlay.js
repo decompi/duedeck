@@ -1,6 +1,24 @@
 const DUEDECK_HOST_ID = "duedeck-overlay-host";
 const OPEN_ATTRIBUTE = "data-open";
 
+function isLikelyCanvasPage() {
+    const hostname = window.location.hostname.toLowerCase();
+    const pathname = window.location.pathname.toLowerCase();
+
+    if (hostname.endsWith(".instructure.com")) return true;
+    if (hostname.endsWith(".canvaslms.com")) return true;
+    if (hostname.startsWith("canvas.")) return true;
+
+    const hasCanvasRoute = pathname.includes("/courses/") || pathname.includes("/assignments/");
+    const hasCanvasDom =
+        document.querySelector("#application") ||
+        document.querySelector(".ic-app") ||
+        document.querySelector("#flash_screenreader_holder") ||
+        document.querySelector("body[class*='context-course']");
+
+    return Boolean(hasCanvasRoute && hasCanvasDom);
+}
+
 async function loadExtensionFile(path) {
     const response = await fetch(chrome.runtime.getURL(path));
 
@@ -60,6 +78,8 @@ async function mountDueDeck() {
 }
 
 function startDueDeck() {
+    if (!isLikelyCanvasPage()) return;
+
     mountDueDeck().catch((error) => {
         console.error("[DueDeck] Failed to mount overlay", error);
     });
