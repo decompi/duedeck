@@ -14,14 +14,20 @@
       "matches": [
         "https://*/*"
       ],
-      "js": ["content/overlay.js"],
+      "js": ["content/canvas/panel-controller.js"],
       "run_at": "document_idle",
       "all_frames": false
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["content/overlay.css", "content/panel.html"],
+      "resources": [
+        "content/canvas/base.css",
+        "content/canvas/launcher.css",
+        "content/canvas/launcher.html",
+        "content/canvas/panel.css",
+        "content/canvas/panel.html"
+      ],
       "matches": [
         "https://*/*"
       ]

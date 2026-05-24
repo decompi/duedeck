@@ -4,6 +4,6 @@ chrome.action.onClicked.addListener(async (tab) => {
 
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        files: ["content/overlay.js"],
+        files: ["content/canvas/panel-controller.js"],
     });
 })

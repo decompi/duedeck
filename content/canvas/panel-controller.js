@@ -1,7 +1,7 @@
-const DUEDECK_HOST_ID = "duedeck-overlay-host";
+const DUEDECK_HOST_ID = "duedeck-canvas-panel-host";
 const OPEN_ATTRIBUTE = "data-open";
 const LEGACY_STORAGE_KEY = "duedeckOverlayLayout";
-const STORAGE_KEY = "duedeckPanelLayout";
+const STORAGE_KEY = "duedeckCanvasPanelLayout";
 
 const DEFAULT_LAYOUT = {
     panelHeight: 660,
@@ -58,17 +58,20 @@ async function loadExtensionFile(path) {
     return response.text();
 }
 
-async function createShadowContent(shadowRoot) {
-    const [css, html] = await Promise.all([
-        loadExtensionFile("content/overlay.css"),
-        loadExtensionFile("content/panel.html"),
+async function createPanelShadowDom(shadowRoot) {
+    const [baseCss, launcherCss, panelCss, launcherHtml, panelHtml] = await Promise.all([
+        loadExtensionFile("content/canvas/base.css"),
+        loadExtensionFile("content/canvas/launcher.css"),
+        loadExtensionFile("content/canvas/panel.css"),
+        loadExtensionFile("content/canvas/launcher.html"),
+        loadExtensionFile("content/canvas/panel.html"),
     ]);
 
     const style = document.createElement("style");
-    style.textContent = css;
+    style.textContent = [baseCss, launcherCss, panelCss].join("\n");
 
     const template = document.createElement("template");
-    template.innerHTML = html;
+    template.innerHTML = `${launcherHtml}\n${panelHtml}`;
 
     shadowRoot.append(style, template.content.cloneNode(true));
 }
@@ -212,7 +215,7 @@ function bindPanelResize(panel, layout) {
     });
 }
 
-function bindOverlayControls(host, shadowRoot, layout) {
+function bindPanelControls(host, shadowRoot, layout) {
     const launcher = shadowRoot.querySelector("[data-launcher]");
     const closeButton = shadowRoot.querySelector("[data-close]");
     const panel = shadowRoot.querySelector("[data-panel]");
@@ -241,7 +244,7 @@ function bindOverlayControls(host, shadowRoot, layout) {
     }
 }
 
-async function mountDueDeck() {
+async function mountDueDeckCanvasPanel() {
     if (document.getElementById(DUEDECK_HOST_ID)) return;
 
     const host = document.createElement("div");
@@ -249,7 +252,7 @@ async function mountDueDeck() {
 
     const shadowRoot = host.attachShadow({ mode: "open" });
 
-    await createShadowContent(shadowRoot);
+    await createPanelShadowDom(shadowRoot);
     const layout = await getStoredLayout();
     const panel = shadowRoot.querySelector("[data-panel]");
 
@@ -257,7 +260,7 @@ async function mountDueDeck() {
         applyLayout(host, panel, layout);
     }
 
-    bindOverlayControls(host, shadowRoot, layout);
+    bindPanelControls(host, shadowRoot, layout);
 
     document.documentElement.append(host);
 }
@@ -265,8 +268,8 @@ async function mountDueDeck() {
 function startDueDeck() {
     if (!isLikelyCanvasPage()) return;
 
-    mountDueDeck().catch((error) => {
-        console.error("[DueDeck] Failed to mount overlay", error);
+    mountDueDeckCanvasPanel().catch((error) => {
+        console.error("[DueDeck] Failed to mount Canvas panel", error);
     });
 }
 
