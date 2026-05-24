@@ -302,6 +302,48 @@
   line-height: 1;
 }
 
+.duedeck-assignment__time--overdue {
+  color: #ff2525;
+}
+
+/* ── Skeleton loading ──────────────────────────────────────────────────────── */
+
+@keyframes duedeck-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.duedeck-assignment--skeleton {
+  pointer-events: none;
+}
+
+.duedeck-assignment--skeleton:nth-child(2) { --dd-shimmer-delay: 120ms; }
+.duedeck-assignment--skeleton:nth-child(3) { --dd-shimmer-delay: 240ms; }
+
+.duedeck-skeleton__block {
+  display: block;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f0f0f6 25%, #e6e6ee 50%, #f0f0f6 75%);
+  background-size: 300% 100%;
+  animation: duedeck-shimmer 1.5s ease-in-out infinite;
+  animation-delay: var(--dd-shimmer-delay, 0ms);
+}
+
+.duedeck-skeleton__block--time  { width: 54px; height: 13px; }
+.duedeck-skeleton__block--title { width: 68%; height: 15px; }
+.duedeck-skeleton__block--meta  { width: 44%; height: 12px; margin-top: 5px; }
+.duedeck-skeleton__block--badge { width: 23px; height: 23px; border-radius: 999px; }
+
+/* ── Empty / error status ──────────────────────────────────────────────────── */
+
+.duedeck-up-next__status {
+  margin: 0;
+  padding: 22px 0;
+  color: #9ca3af;
+  font-size: 14px;
+  text-align: center;
+}
+
 .duedeck-next-class {
   display: flex;
   align-items: center;

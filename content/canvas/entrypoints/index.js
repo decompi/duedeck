@@ -88,7 +88,11 @@ async function createPanelShadowDom(shadowRoot) {
 }
 
 async function loadPanelComponents() {
-    return import(chrome.runtime.getURL("content/canvas/components/up-next/up-next.js"));
+    const [upNext, api] = await Promise.all([
+        import(chrome.runtime.getURL("content/canvas/components/up-next/up-next.js")),
+        import(chrome.runtime.getURL("content/canvas/api/planner.js")),
+    ]);
+    return { ...upNext, ...api };
 }
 
 function applyLayout(host, panel, layout) {
@@ -268,7 +272,8 @@ async function mountDueDeckCanvasPanel() {
     const shadowRoot = host.attachShadow({ mode: "open" });
 
     await createPanelShadowDom(shadowRoot);
-    const { renderUpNextAssignments } = await loadPanelComponents();
+    const { renderUpNextAssignments, renderUpNextLoading, renderUpNextError, fetchUpcomingAssignments, fetchCurrentUser, fetchAssignmentStats } =
+        await loadPanelComponents();
     const layout = await getStoredLayout();
     const panel = shadowRoot.querySelector("[data-panel]");
 
@@ -276,10 +281,24 @@ async function mountDueDeckCanvasPanel() {
         applyLayout(host, panel, layout);
     }
 
-    const greeting = shadowRoot.querySelector(".duedeck-greeting");
-    if (greeting) greeting.textContent = `${getGreeting()}, Matin`;
+    const listEl = shadowRoot.querySelector("[data-up-next-list]");
+    renderUpNextLoading(listEl);
 
-    renderUpNextAssignments(shadowRoot.querySelector("[data-up-next-list]"));
+    const [name] = await Promise.allSettled([fetchCurrentUser()]);
+    const firstName = name.status === "fulfilled" ? name.value : null;
+    const greeting = shadowRoot.querySelector(".duedeck-greeting");
+    if (greeting) greeting.textContent = `${getGreeting()}, ${firstName ?? "there"}`;
+
+    fetchUpcomingAssignments()
+        .then(assignments => renderUpNextAssignments(listEl, assignments))
+        .catch(() => renderUpNextError(listEl));
+
+    fetchAssignmentStats().then(({ dueToday, overdue }) => {
+        const todayEl = shadowRoot.querySelector("[data-stat='today'] strong");
+        const overdueEl = shadowRoot.querySelector("[data-stat='overdue'] strong");
+        if (todayEl) todayEl.textContent = dueToday;
+        if (overdueEl) overdueEl.textContent = overdue;
+    }).catch(() => {});
 
     bindPanelControls(host, shadowRoot, layout);
 
