@@ -1,4 +1,5 @@
-import { setStoredLayout } from "../../lib/storage.js";
+import { setStoredLayout, saveTriageState } from "../../lib/storage.js";
+import { renderOverdueDrawer } from "./triage.js";
 
 export function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
@@ -153,10 +154,14 @@ export function bindPanelResize(panel, layout) {
     });
 }
 
-const DRAWER_WIDTH = 196;
 const DRAWER_GAP = 10;
 
-export function bindDrawer(shadowRoot, panel, layout, stats, renderDrawerItems) {
+const DRAWER_ICONS = {
+    overdue: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`,
+    today: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+};
+
+export function bindDrawer(shadowRoot, panel, layout, stats, initialTriageState, renderDrawerItems) {
     const drawer = shadowRoot.querySelector("[data-drawer]");
     if (!drawer) {
         return;
@@ -168,17 +173,51 @@ export function bindDrawer(shadowRoot, panel, layout, stats, renderDrawerItems) 
     const drawerIcon = drawer.querySelector("[data-drawer-icon]");
     const drawerClose = drawer.querySelector("[data-drawer-close]");
 
-    const ICONS = {
-        overdue: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`,
-        today: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
-    };
-
+    const triage = { ...initialTriageState };
     let activeType = null;
     let savedPanelX = null;
 
+    function getUnresolvedCount() {
+        return stats.overdueItems.filter(a => !triage[a.id]).length;
+    }
+
+    function updateOverdueStatCard() {
+        const count = getUnresolvedCount();
+        const overdueEl = shadowRoot.querySelector("[data-stat='overdue'] strong");
+        const statEl = shadowRoot.querySelector("[data-stat='overdue']");
+
+        if (overdueEl) {
+            overdueEl.textContent = count;
+        }
+        if (statEl) {
+            if (count > 0) {
+                statEl.removeAttribute("data-resolved");
+            } else {
+                statEl.setAttribute("data-resolved", "");
+            }
+        }
+    }
+
+    function onTriage(id, status) {
+        triage[id] = status;
+        saveTriageState(triage);
+        updateOverdueStatCard();
+        drawerBadge.textContent = getUnresolvedCount();
+        renderOverdueDrawer(drawerList, stats.overdueItems, triage, onTriage, onUndo);
+    }
+
+    function onUndo(id) {
+        delete triage[id];
+        saveTriageState(triage);
+        updateOverdueStatCard();
+        drawerBadge.textContent = getUnresolvedCount();
+        renderOverdueDrawer(drawerList, stats.overdueItems, triage, onTriage, onUndo);
+    }
+
     function positionDrawer() {
         const panelRect = panel.getBoundingClientRect();
-        const neededRight = panelRect.right + DRAWER_GAP + DRAWER_WIDTH;
+        const drawerWidth = drawer.offsetWidth || 196;
+        const neededRight = panelRect.right + DRAWER_GAP + drawerWidth;
         const maxRight = window.innerWidth - 12;
 
         if (neededRight > maxRight) {
@@ -203,15 +242,16 @@ export function bindDrawer(shadowRoot, panel, layout, stats, renderDrawerItems) 
         savedPanelX = layout.panelX;
 
         drawerLabel.textContent = type === "overdue" ? "Overdue" : "Due Today";
-        drawerBadge.textContent = type === "overdue" ? stats.overdue : stats.dueToday;
-        drawerIcon.innerHTML = ICONS[type];
+        drawerIcon.innerHTML = DRAWER_ICONS[type];
         drawer.setAttribute("data-type", type);
 
-        renderDrawerItems(
-            drawerList,
-            type === "overdue" ? stats.overdueItems : stats.dueTodayItems,
-            type
-        );
+        if (type === "overdue") {
+            drawerBadge.textContent = getUnresolvedCount();
+            renderOverdueDrawer(drawerList, stats.overdueItems, triage, onTriage, onUndo);
+        } else {
+            drawerBadge.textContent = stats.dueToday;
+            renderDrawerItems(drawerList, stats.dueTodayItems, type);
+        }
 
         positionDrawer();
 
@@ -241,6 +281,8 @@ export function bindDrawer(shadowRoot, panel, layout, stats, renderDrawerItems) 
 
         shadowRoot.querySelectorAll("[data-stat]").forEach(el => el.removeAttribute("data-active"));
     }
+
+    updateOverdueStatCard();
 
     shadowRoot.querySelector("[data-stat='overdue']")?.addEventListener("click", () => openDrawer("overdue"));
     shadowRoot.querySelector("[data-stat='today']")?.addEventListener("click", () => openDrawer("today"));

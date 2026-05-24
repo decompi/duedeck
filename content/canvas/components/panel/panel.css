@@ -174,6 +174,14 @@
   color: #ef2424;
 }
 
+.duedeck-stat--overdue[data-resolved] {
+  background: #f8f7fc;
+}
+
+.duedeck-stat--overdue[data-resolved] strong {
+  color: #5b21b6;
+}
+
 .duedeck-stat--today[data-active] {
   background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%);
   box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.25);
@@ -189,7 +197,7 @@
 .duedeck-drawer {
   position: fixed;
   width: 196px;
-  max-height: 320px;
+  max-height: 420px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -254,6 +262,11 @@
 .duedeck-drawer[data-type="today"] .duedeck-drawer__badge   { background: #6d28d9; }
 .duedeck-drawer[data-type="overdue"] .duedeck-drawer__icon  { color: #ef4444; }
 .duedeck-drawer[data-type="today"] .duedeck-drawer__icon    { color: #6d28d9; }
+
+.duedeck-drawer[data-type="overdue"] {
+  width: 280px;
+  max-height: 520px;
+}
 
 .duedeck-drawer__close {
   display: grid;
@@ -605,6 +618,239 @@
   padding: 0 20px 20px;
   color: #6b7280;
   font-size: 15px;
+}
+
+/* ── Triage items (overdue drawer) ─────────────────────────────────────────── */
+
+.duedeck-triage-item {
+  padding: 10px 8px 8px;
+  border-bottom: 1px solid #f0f0f6;
+}
+
+.duedeck-triage-item:last-of-type {
+  border-bottom: 0;
+}
+
+.duedeck-triage-item__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.duedeck-triage-badge {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 820;
+  margin-top: 1px;
+}
+
+.duedeck-triage-item__info {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.duedeck-triage-item__title {
+  font-size: 12px;
+  font-weight: 720;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.duedeck-triage-item__course {
+  font-size: 11px;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.duedeck-triage-item__time {
+  display: block;
+  font-size: 11px;
+  font-weight: 720;
+  color: #ef4444;
+  margin-bottom: 8px;
+}
+
+.duedeck-triage-item__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.duedeck-triage-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 640;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.duedeck-triage-btn--submitted {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.duedeck-triage-btn--submitted:hover {
+  background: #fef3c7;
+}
+
+.duedeck-triage-btn--neutral {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.duedeck-triage-btn--neutral:hover {
+  background: #e5e7eb;
+}
+
+/* ── Resolved section ───────────────────────────────────────────────────────── */
+
+.duedeck-resolved {
+  border-top: 1px solid #eceef5;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.duedeck-resolved__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 640;
+  cursor: pointer;
+  text-align: left;
+}
+
+.duedeck-resolved__toggle:hover {
+  background: #f9f8ff;
+  color: #374151;
+}
+
+.duedeck-resolved__chevron {
+  font-size: 10px;
+}
+
+.duedeck-resolved__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 4px 6px;
+}
+
+.duedeck-resolved__list[hidden] {
+  display: none;
+}
+
+.duedeck-resolved-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #f0f0f6;
+}
+
+.duedeck-resolved-item__info {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.duedeck-resolved-item__title {
+  font-size: 11px;
+  font-weight: 720;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.duedeck-resolved-item__status {
+  font-size: 10px;
+  color: #9ca3af;
+  display: block;
+}
+
+.duedeck-resolved-item--submitted .duedeck-resolved-item__status {
+  color: #92400e;
+}
+
+.duedeck-resolved-item__undo {
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #6d28d9;
+  font-size: 11px;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.duedeck-resolved-item__undo:hover {
+  text-decoration: underline;
+}
+
+/* ── All-clear state ────────────────────────────────────────────────────────── */
+
+.duedeck-triage-clear {
+  padding: 20px 12px 16px;
+  text-align: center;
+}
+
+.duedeck-triage-clear__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 10px;
+  border-radius: 999px;
+  background: #f0fdf4;
+}
+
+.duedeck-triage-clear__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.duedeck-triage-clear__text {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 720;
+  color: #111827;
+}
+
+.duedeck-triage-clear__sub {
+  margin: 3px 0 0;
+  font-size: 11px;
+  color: #9ca3af;
 }
 
 @media (max-width: 520px) {

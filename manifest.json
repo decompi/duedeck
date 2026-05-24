@@ -28,6 +28,7 @@
         "content/canvas/components/panel/panel.css",
         "content/canvas/components/panel/panel.html",
         "content/canvas/components/panel/panel.js",
+        "content/canvas/components/panel/triage.js",
         "content/canvas/components/up-next/up-next.js",
         "content/canvas/api/planner.js",
         "content/canvas/lib/date.js",

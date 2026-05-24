@@ -1,4 +1,4 @@
-import { getStoredLayout } from "../lib/storage.js";
+import { getStoredLayout, getTriageState } from "../lib/storage.js";
 import { applyLayout, bindPanelControls, bindDrawer } from "../components/panel/panel.js";
 
 const DUEDECK_HOST_ID = "duedeck-canvas-panel-host";
@@ -91,19 +91,17 @@ async function mountDueDeckCanvasPanel() {
         .then(assignments => renderUpNextAssignments(listEl, assignments))
         .catch(() => renderUpNextError(listEl));
 
-    fetchAssignmentStats().then(stats => {
-        const todayEl = shadowRoot.querySelector("[data-stat='today'] strong");
-        const overdueEl = shadowRoot.querySelector("[data-stat='overdue'] strong");
-        if (todayEl) {
-            todayEl.textContent = stats.dueToday;
-        }
-        if (overdueEl) {
-            overdueEl.textContent = stats.overdue;
-        }
-        if (panel) {
-            bindDrawer(shadowRoot, panel, layout, stats, renderDrawerItems);
-        }
-    }).catch(() => {});
+    Promise.all([fetchAssignmentStats(), getTriageState()])
+        .then(([stats, triageState]) => {
+            const todayEl = shadowRoot.querySelector("[data-stat='today'] strong");
+            if (todayEl) {
+                todayEl.textContent = stats.dueToday;
+            }
+            if (panel) {
+                bindDrawer(shadowRoot, panel, layout, stats, triageState, renderDrawerItems);
+            }
+        })
+        .catch(() => {});
 
     bindPanelControls(host, shadowRoot, layout);
 

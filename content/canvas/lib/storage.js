@@ -27,3 +27,21 @@ export function setStoredLayout(layout) {
         // Extension context was invalidated (e.g. reloaded while tab was open)
     }
 }
+
+const TRIAGE_STORAGE_KEY = "duedeckTriageState";
+
+export function getTriageState() {
+    return new Promise((resolve) => {
+        chrome.storage?.local?.get([TRIAGE_STORAGE_KEY], (result) => {
+            resolve(result?.[TRIAGE_STORAGE_KEY] ?? {});
+        });
+    });
+}
+
+export function saveTriageState(state) {
+    try {
+        chrome.storage?.local?.set({ [TRIAGE_STORAGE_KEY]: state });
+    } catch {
+        // Extension context was invalidated (e.g. reloaded while tab was open)
+    }
+}

@@ -147,6 +147,7 @@ export async function fetchAssignmentStats() {
 function toAssignment(item) {
     const dueAt = item.plannable?.due_at ?? item.plannable_date ?? null;
     return {
+        id: `${item.plannable_type}_${item.plannable_id}`,
         course: item.context_name ?? "Unknown Course",
         platform: "Canvas",
         platformType: "canvas",
