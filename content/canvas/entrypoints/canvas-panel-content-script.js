@@ -4,8 +4,8 @@ const LEGACY_STORAGE_KEY = "duedeckOverlayLayout";
 const STORAGE_KEY = "duedeckCanvasPanelLayout";
 
 const DEFAULT_LAYOUT = {
-    panelHeight: 660,
-    panelWidth: 352,
+    panelHeight: 688,
+    panelWidth: 420,
     panelX: null,
     panelY: null,
 };
@@ -60,11 +60,11 @@ async function loadExtensionFile(path) {
 
 async function createPanelShadowDom(shadowRoot) {
     const [baseCss, launcherCss, panelCss, launcherHtml, panelHtml] = await Promise.all([
-        loadExtensionFile("content/canvas/base.css"),
-        loadExtensionFile("content/canvas/launcher.css"),
-        loadExtensionFile("content/canvas/panel.css"),
-        loadExtensionFile("content/canvas/launcher.html"),
-        loadExtensionFile("content/canvas/panel.html"),
+        loadExtensionFile("content/canvas/styles/shadow-root.css"),
+        loadExtensionFile("content/canvas/components/launcher/launcher.css"),
+        loadExtensionFile("content/canvas/components/panel/panel.css"),
+        loadExtensionFile("content/canvas/components/launcher/launcher.html"),
+        loadExtensionFile("content/canvas/components/panel/panel.html"),
     ]);
 
     const style = document.createElement("style");
@@ -76,10 +76,14 @@ async function createPanelShadowDom(shadowRoot) {
     shadowRoot.append(style, template.content.cloneNode(true));
 }
 
+async function loadPanelComponents() {
+    return import(chrome.runtime.getURL("content/canvas/components/up-next/up-next.js"));
+}
+
 function applyLayout(host, panel, layout) {
     const maxPanelWidth = Math.max(280, window.innerWidth - 28);
     const maxPanelHeight = Math.max(420, window.innerHeight - 42);
-    const panelWidth = clamp(layout.panelWidth, 300, Math.min(430, maxPanelWidth));
+    const panelWidth = clamp(layout.panelWidth, 340, Math.min(460, maxPanelWidth));
     const panelHeight = clamp(layout.panelHeight, 500, Math.min(760, maxPanelHeight));
     const defaultPanelX = window.innerWidth - panelWidth - 16;
     const defaultPanelY = (window.innerHeight - panelHeight) / 2;
@@ -179,8 +183,8 @@ function bindPanelResize(panel, layout) {
         const maxPanelHeight = Math.min(760, window.innerHeight - 42);
         const nextWidth = clamp(
             resizeState.startWidth + resizeState.startPointerX - event.clientX,
-            300,
-            maxPanelWidth
+            340,
+            Math.min(460, maxPanelWidth)
         );
         const nextHeight = clamp(
             resizeState.startHeight + event.clientY - resizeState.startPointerY,
@@ -253,12 +257,15 @@ async function mountDueDeckCanvasPanel() {
     const shadowRoot = host.attachShadow({ mode: "open" });
 
     await createPanelShadowDom(shadowRoot);
+    const { renderUpNextAssignments } = await loadPanelComponents();
     const layout = await getStoredLayout();
     const panel = shadowRoot.querySelector("[data-panel]");
 
     if (panel) {
         applyLayout(host, panel, layout);
     }
+
+    renderUpNextAssignments(shadowRoot.querySelector("[data-up-next-list]"));
 
     bindPanelControls(host, shadowRoot, layout);
 

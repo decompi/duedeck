@@ -14,7 +14,7 @@
       "matches": [
         "https://*/*"
       ],
-      "js": ["content/canvas/panel-controller.js"],
+      "js": ["content/canvas/entrypoints/canvas-panel-content-script.js"],
       "run_at": "document_idle",
       "all_frames": false
     }
@@ -22,11 +22,12 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "content/canvas/base.css",
-        "content/canvas/launcher.css",
-        "content/canvas/launcher.html",
-        "content/canvas/panel.css",
-        "content/canvas/panel.html"
+        "content/canvas/styles/shadow-root.css",
+        "content/canvas/components/launcher/launcher.css",
+        "content/canvas/components/launcher/launcher.html",
+        "content/canvas/components/panel/panel.css",
+        "content/canvas/components/panel/panel.html",
+        "content/canvas/components/up-next/up-next.js"
       ],
       "matches": [
         "https://*/*"

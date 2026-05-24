@@ -1,0 +1,383 @@
+.duedeck-panel {
+  position: fixed;
+  top: 50%;
+  left: auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(420px, calc(100vw - 28px));
+  height: min(688px, calc(100vh - 42px));
+  max-height: calc(100vh - 42px);
+  overflow: hidden;
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.99);
+  box-shadow: 0 24px 88px rgba(30, 27, 75, 0.22);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(18px) scaleX(0.05) scaleY(0.38);
+  transform-origin: right center;
+  transition: opacity 80ms ease, transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 240ms ease;
+}
+
+:host([data-open="true"]) .duedeck-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+}
+
+.duedeck-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 12px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.duedeck-panel__header:active {
+  cursor: grabbing;
+}
+
+.duedeck-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.duedeck-brand__mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #4f46e5 100%);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.24);
+}
+
+.duedeck-brand__mark svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.duedeck-brand__name {
+  margin: 0;
+  color: #151827;
+  font-size: 20px;
+  font-weight: 820;
+  letter-spacing: 0;
+}
+
+.duedeck-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.duedeck-icon-button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 12px;
+  background: #f7f7fb;
+  color: #5b6172;
+  cursor: pointer;
+}
+
+.duedeck-icon-button:hover,
+.duedeck-icon-button:focus-visible {
+  background: #ede9fe;
+  color: #5b21b6;
+  outline: none;
+}
+
+.duedeck-icon-button svg,
+.duedeck-week-button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.duedeck-panel__body {
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  gap: 18px;
+  min-height: 0;
+  padding: 12px 20px 18px;
+}
+
+.duedeck-greeting {
+  margin: 0;
+  color: #0f172a;
+  font-size: 25px;
+  font-weight: 820;
+  line-height: 1.16;
+  letter-spacing: 0;
+}
+
+.duedeck-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.duedeck-stat {
+  height: 92px;
+  border: 1px solid rgba(15, 23, 42, 0.03);
+  border-radius: 14px;
+  background: #f8f7fc;
+  color: #1f2937;
+  cursor: pointer;
+  text-align: left;
+  padding: 16px 18px;
+}
+
+.duedeck-stat span {
+  display: block;
+  margin-bottom: 8px;
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 640;
+}
+
+.duedeck-stat strong {
+  color: #5b21b6;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 820;
+}
+
+.duedeck-stat--today {
+  background: linear-gradient(135deg, #f7f5ff 0%, #fbfbff 100%);
+}
+
+.duedeck-stat--overdue {
+  background: linear-gradient(135deg, #fff1f6 0%, #fffafa 100%);
+}
+
+.duedeck-stat--overdue strong {
+  color: #ef2424;
+}
+
+.duedeck-up-next {
+  min-height: 0;
+}
+
+.duedeck-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-top: 1px solid #eceef5;
+  border-bottom: 1px solid #eceef5;
+}
+
+.duedeck-section-heading h3 {
+  margin: 0;
+  color: #273142;
+  font-size: 13px;
+  font-weight: 820;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.duedeck-section-heading button {
+  border: 0;
+  background: transparent;
+  color: #5b21b6;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 720;
+}
+
+.duedeck-list {
+  display: grid;
+}
+
+.duedeck-assignment {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid #eceef5;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.duedeck-assignment__time {
+  color: #5b4cf1;
+  font-size: 14px;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.duedeck-assignment__time--urgent {
+  color: #ff2525;
+}
+
+.duedeck-assignment__content {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.duedeck-assignment__content strong {
+  overflow: hidden;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 780;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.duedeck-assignment__meta {
+  overflow: hidden;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.duedeck-assignment__badge {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 999px;
+}
+
+.duedeck-assignment__badge--canvas {
+  background:
+    radial-gradient(circle at center, transparent 31%, #ff1f1f 33% 42%, transparent 44%),
+    conic-gradient(#ff1f1f 0 10%, transparent 10% 18%, #ff1f1f 18% 28%, transparent 28% 36%, #ff1f1f 36% 46%, transparent 46% 54%, #ff1f1f 54% 64%, transparent 64% 72%, #ff1f1f 72% 82%, transparent 82% 90%, #ff1f1f 90% 100%);
+}
+
+.duedeck-assignment__badge--pearson {
+  background: #087f9a;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 820;
+  font-family: Georgia, serif;
+}
+
+.duedeck-next-class {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 98px;
+  padding: 18px;
+  border: 1px solid rgba(91, 33, 182, 0.12);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7f4ff 0%, #fbfaff 100%);
+  color: #111827;
+}
+
+.duedeck-next-class h3,
+.duedeck-next-class p {
+  margin: 0;
+}
+
+.duedeck-next-class h3 {
+  color: #14145f;
+  font-size: 20px;
+  font-weight: 820;
+}
+
+.duedeck-next-class__course {
+  margin-top: 7px !important;
+  color: #14145f;
+  font-size: 16px;
+  font-weight: 760;
+}
+
+.duedeck-next-class__meta {
+  margin-top: 4px !important;
+  color: #596174;
+  font-size: 16px;
+}
+
+.duedeck-next-class svg {
+  width: 31px;
+  height: 31px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: #5b21b6;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.duedeck-panel__footer {
+  padding: 0 20px 14px;
+}
+
+.duedeck-panel__resize {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  cursor: nesw-resize;
+}
+
+.duedeck-week-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 820;
+  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.24);
+}
+
+.duedeck-week-button:hover,
+.duedeck-week-button:focus-visible {
+  background: linear-gradient(135deg, #5b21b6 0%, #4338ca 100%);
+  outline: none;
+}
+
+.duedeck-sync-status {
+  margin: 0;
+  padding: 0 20px 20px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+@media (max-width: 520px) {
+  .duedeck-panel {
+    width: calc(100vw - 24px);
+    height: min(620px, calc(100vh - 36px));
+    transform: translateX(18px) scaleX(0.08) scaleY(0.34);
+  }
+
+  :host([data-open="true"]) .duedeck-panel {
+    transform: translateX(0) scale(1);
+  }
+}
