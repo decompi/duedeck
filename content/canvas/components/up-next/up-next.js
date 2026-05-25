@@ -1,6 +1,5 @@
 const PLATFORM_LOGOS = {
     canvas: { fallback: "C", path: "assets/platforms/canvas.svg" },
-    pearson: { fallback: "P", path: "assets/platforms/pearson.svg" },
 };
 
 
@@ -29,14 +28,18 @@ function createPlatformBadge(assignment) {
 }
 
 
-function createUpNextItem(assignment) {
+function createUpNextItem(assignment, callbacks = {}) {
     const item = document.createElement("button");
     item.className = "duedeck-assignment";
     item.type = "button";
-
-    if (assignment.url) {
-        item.addEventListener("click", () => window.open(assignment.url, "_blank", "noopener"));
+    item.dataset.type = assignment.type ?? "assignment";
+    item.dataset.saved = assignment.saved ? "true" : "false";
+    if (assignment.courseColor) {
+        item.dataset.courseColor = "true";
+        item.style.setProperty("--course-color", assignment.courseColor);
     }
+
+    item.addEventListener("click", () => callbacks.onSelect?.(assignment));
 
     const time = document.createElement("span");
     time.className = `duedeck-assignment__time duedeck-assignment__time--${assignment.timeTone}`;
@@ -50,22 +53,45 @@ function createUpNextItem(assignment) {
 
     const meta = document.createElement("span");
     meta.className = "duedeck-assignment__meta";
-    meta.textContent = `${assignment.course} • ${assignment.platform}`;
+    const type = assignment.type ? `${assignment.type[0].toUpperCase()}${assignment.type.slice(1)}` : "Assignment";
+    const points = Number.isFinite(Number(assignment.points)) ? ` • ${assignment.points} pts` : "";
+    meta.textContent = `${assignment.course} • ${type}${points}`;
 
     content.append(title, meta);
-    item.append(time, content, createPlatformBadge(assignment));
+    const tail = document.createElement("span");
+    tail.className = "duedeck-assignment__tail";
+    if (assignment.saved && callbacks.onRemove) {
+        const remove = document.createElement("span");
+        remove.className = "duedeck-row-action";
+        remove.setAttribute("role", "button");
+        remove.setAttribute("tabindex", "0");
+        remove.textContent = "Unsave";
+        const removeAssignment = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            callbacks.onRemove(assignment.id);
+        };
+        remove.addEventListener("click", removeAssignment);
+        remove.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                removeAssignment(event);
+            }
+        });
+        tail.append(remove);
+    }
+    tail.append(createPlatformBadge(assignment));
+
+    item.append(time, content, tail);
     return item;
 }
 
 
-function createDrawerItem(assignment, type) {
+function createDrawerItem(assignment, type, callbacks = {}) {
     const item = document.createElement("button");
     item.className = "duedeck-drawer__item";
     item.type = "button";
 
-    if (assignment.url) {
-        item.addEventListener("click", () => window.open(assignment.url, "_blank", "noopener"));
-    }
+    item.addEventListener("click", () => callbacks.onSelect?.(assignment));
 
     const badge = createPlatformBadge(assignment);
     badge.style.cssText = "width:22px;height:22px;flex-shrink:0";
@@ -90,7 +116,7 @@ function createDrawerItem(assignment, type) {
     return item;
 }
 
-export function renderDrawerItems(root, assignments, type) {
+export function renderDrawerItems(root, assignments, type, callbacks = {}) {
     if (!root) {
         return;
     }
@@ -101,7 +127,7 @@ export function renderDrawerItems(root, assignments, type) {
         root.replaceChildren(msg);
         return;
     }
-    root.replaceChildren(...assignments.map(a => createDrawerItem(a, type)));
+    root.replaceChildren(...assignments.map(a => createDrawerItem(a, type, callbacks)));
 }
 
 function createSkeletonItem() {
@@ -147,7 +173,7 @@ export function renderUpNextLoading(root) {
     root.replaceChildren(...Array.from({ length: 3 }, createSkeletonItem));
 }
 
-export function renderUpNextAssignments(root, assignments) {
+export function renderUpNextAssignments(root, assignments, callbacks = {}) {
     if (!root) {
         return;
     }
@@ -158,7 +184,7 @@ export function renderUpNextAssignments(root, assignments) {
         return;
     }
 
-    root.replaceChildren(...assignments.map(createUpNextItem));
+    root.replaceChildren(...assignments.map(assignment => createUpNextItem(assignment, callbacks)));
 }
 
 export function renderUpNextError(root) {
@@ -167,4 +193,129 @@ export function renderUpNextError(root) {
     }
     root.removeAttribute("aria-busy");
     root.replaceChildren(createStatusMessage("Couldn't load assignments."));
+}
+
+function getDayKey(assignment) {
+    const due = assignment.dueAt ? new Date(assignment.dueAt) : null;
+    if (!due || Number.isNaN(due.getTime())) {
+        return "No due date";
+    }
+    return due.toDateString();
+}
+
+function getDayLabel(assignment) {
+    const due = assignment.dueAt ? new Date(assignment.dueAt) : null;
+    if (!due || Number.isNaN(due.getTime())) {
+        return "No due date";
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueStart = new Date(due);
+    dueStart.setHours(0, 0, 0, 0);
+    const diffDays = Math.round((dueStart - today) / 86_400_000);
+    const date = due.toLocaleDateString([], { month: "short", day: "numeric" });
+
+    if (diffDays < 0) {
+        return `Overdue • ${date}`;
+    }
+    if (diffDays === 0) {
+        return `Today • ${date}`;
+    }
+    if (diffDays === 1) {
+        return `Tomorrow • ${date}`;
+    }
+    return `${due.toLocaleDateString([], { weekday: "long" })} • ${date}`;
+}
+
+function createWeekItem(assignment, callbacks = {}) {
+    const item = document.createElement("button");
+    item.className = "duedeck-week-item";
+    item.type = "button";
+    item.dataset.type = assignment.type ?? "assignment";
+    item.dataset.saved = assignment.saved ? "true" : "false";
+    if (assignment.courseColor) {
+        item.dataset.courseColor = "true";
+        item.style.setProperty("--course-color", assignment.courseColor);
+    }
+
+    item.addEventListener("click", () => callbacks.onSelect?.(assignment));
+
+    const type = document.createElement("span");
+    type.className = "duedeck-week-item__type";
+    type.style.background = assignment.courseColor ? `${assignment.courseColor}20` : "";
+    type.style.color = assignment.courseColor ?? "";
+    type.textContent = (assignment.type ?? "assignment").slice(0, 1).toUpperCase();
+
+    const info = document.createElement("span");
+    const title = document.createElement("span");
+    title.className = "duedeck-week-item__title";
+    title.textContent = assignment.title;
+
+    const meta = document.createElement("span");
+    meta.className = "duedeck-week-item__meta";
+    meta.textContent = `${assignment.course} • ${assignment.platform}`;
+
+    const time = document.createElement("span");
+    time.className = `duedeck-week-item__time duedeck-week-item__time--${assignment.timeTone}`;
+    time.textContent = assignment.time;
+
+    info.append(title, meta);
+    const tail = document.createElement("span");
+    tail.className = "duedeck-assignment__tail";
+    if (assignment.saved && callbacks.onRemove) {
+        const remove = document.createElement("span");
+        remove.className = "duedeck-row-action";
+        remove.setAttribute("role", "button");
+        remove.setAttribute("tabindex", "0");
+        remove.textContent = "Unsave";
+        remove.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            callbacks.onRemove(assignment.id);
+        });
+        tail.append(remove);
+    }
+    tail.append(time);
+
+    item.append(type, info, tail);
+    return item;
+}
+
+export function renderWeekAssignments(root, assignments, filter = "all", callbacks = {}) {
+    if (!root) {
+        return;
+    }
+
+    const filtered = filter === "all"
+        ? assignments
+        : assignments.filter(assignment => assignment.type === filter);
+
+    if (!filtered.length) {
+        root.replaceChildren(createStatusMessage("Nothing due in this filter."));
+        return;
+    }
+
+    const groups = new Map();
+    filtered.forEach(assignment => {
+        const key = getDayKey(assignment);
+        if (!groups.has(key)) {
+            groups.set(key, []);
+        }
+        groups.get(key).push(assignment);
+    });
+
+    const sections = Array.from(groups.values()).map(groupAssignments => {
+        const section = document.createElement("section");
+        section.className = "duedeck-day-group";
+
+        const label = document.createElement("p");
+        label.className = "duedeck-day-group__label";
+        label.textContent = getDayLabel(groupAssignments[0]);
+
+        section.append(label, ...groupAssignments.map(assignment => createWeekItem(assignment, callbacks)));
+        return section;
+    });
+
+    root.replaceChildren(...sections);
 }

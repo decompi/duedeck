@@ -2,9 +2,10 @@
   "manifest_version": 3,
   "name": "DueDeck",
   "version": "0.1.0",
-  "description": "A unified assignment dashboard for college deadlines.",
+  "description": "An NJIT-focused assignment dashboard for Canvas deadlines.",
   "action": {
-    "default_title": "DueDeck"
+    "default_title": "DueDeck",
+    "default_popup": "popup/popup.html"
   },
   "background": {
     "service_worker": "background/service-worker.js"
@@ -34,8 +35,7 @@
         "content/canvas/lib/date.js",
         "content/canvas/lib/storage.js",
         "content/canvas/entrypoints/main.js",
-        "assets/platforms/canvas.svg",
-        "assets/platforms/pearson.svg"
+        "assets/platforms/canvas.svg"
       ],
       "matches": [
         "https://*/*"
@@ -45,5 +45,5 @@
   "host_permissions": [
     "https://*/*"
   ],
-  "permissions": ["activeTab", "scripting", "storage"]
+  "permissions": ["activeTab", "alarms", "notifications", "scripting", "storage"]
 }

@@ -1,0 +1,379 @@
+:root {
+  --bg: #ffffff;
+  --surface: #f7f8fa;
+  --surface-strong: #eef1f5;
+  --border: rgba(15, 23, 42, 0.1);
+  --text: #15171c;
+  --muted: #667085;
+  --accent: #d22630;
+  --accent-strong: #a6192e;
+  --navy: #003e7e;
+  --danger: #e5484d;
+  --danger-soft: #fff1f2;
+  --success: #22a06b;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 340px;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.popup {
+  min-height: 360px;
+  padding: 14px;
+}
+
+.popup__header {
+  margin-bottom: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand h1,
+.brand p,
+.onboarding h2,
+.onboarding p,
+.card h2,
+.next-class h2,
+.next-class p {
+  margin: 0;
+}
+
+.brand h1 {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.brand h1::after {
+  content: "NJIT";
+  display: inline-block;
+  margin-left: 7px;
+  padding: 2px 5px;
+  border: 1px solid rgba(0, 62, 126, 0.16);
+  border-radius: 5px;
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 750;
+  vertical-align: 2px;
+}
+
+.brand p {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.onboarding,
+.dashboard {
+  display: grid;
+  gap: 12px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.onboarding__hero {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+}
+
+.onboarding h2 {
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.onboarding__hero p {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.feature-list {
+  display: grid;
+  gap: 8px;
+}
+
+.feature-list p {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.feature-list strong {
+  font-size: 13px;
+}
+
+.feature-list span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.loading-strip {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 0.7fr;
+  gap: 8px;
+}
+
+.loading-strip span {
+  height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--surface), var(--surface-strong), var(--surface));
+  background-size: 240% 100%;
+  animation: pulse 1.2s linear infinite;
+}
+
+@keyframes pulse {
+  to {
+    background-position: -240% 0;
+  }
+}
+
+.state-card {
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+}
+
+.state-card--warning {
+  background: #fffbeb;
+}
+
+.state-card h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.state-card p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.stat {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.stat span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stat strong {
+  color: var(--navy);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.stat--danger {
+  background: var(--danger-soft);
+}
+
+.stat--danger strong {
+  color: var(--danger);
+}
+
+.card,
+.next-class {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.card {
+  padding: 12px;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title h2,
+.next-class h2 {
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.section-title span {
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.assignment-list {
+  display: grid;
+  gap: 0;
+}
+
+.assignment {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.assignment:last-child {
+  border-bottom: 0;
+}
+
+.assignment strong,
+.assignment span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assignment strong {
+  font-size: 13px;
+}
+
+.assignment span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.assignment__time {
+  align-self: center;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.assignment__tail {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
+.assignment__remove {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 750;
+  padding: 3px 7px;
+}
+
+.assignment__remove:hover {
+  background: var(--surface-strong);
+}
+
+.assignment__time--overdue,
+.assignment__time--urgent {
+  color: var(--danger);
+}
+
+.empty {
+  margin: 0;
+  padding: 18px 4px 8px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.next-class {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  background: var(--surface);
+}
+
+.next-class__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background:
+    linear-gradient(var(--navy), var(--navy)) 8px 7px / 14px 2px no-repeat,
+    linear-gradient(var(--navy), var(--navy)) 8px 14px / 14px 2px no-repeat,
+    var(--surface-strong);
+}
+
+.next-class p {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.button-row--stack {
+  grid-template-columns: 1fr;
+}
+
+.button {
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.button:hover {
+  background: var(--surface);
+}
+
+.button--primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background: var(--accent-strong);
+}

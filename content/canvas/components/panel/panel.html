@@ -1,21 +1,35 @@
 <aside class="duedeck-panel" data-panel aria-label="DueDeck panel">
     <header class="duedeck-panel__header" data-panel-drag>
         <div class="duedeck-brand">
-            <span class="duedeck-brand__mark" aria-hidden="true"></span>
             <h2 class="duedeck-brand__name">DueDeck</h2>
         </div>
 
         <div class="duedeck-panel__actions">
-            <button class="duedeck-icon-button" type="button" title="Settings" aria-label="Settings">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"></path>
-                    <path
-                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 7.04 4.3l.06.06A1.65 1.65 0 0 0 8.92 4a1.65 1.65 0 0 0 1-1.51V2a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.31.39.57.69.73.24.13.52.21.82.21H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z">
-                    </path>
+            <button class="duedeck-icon-button duedeck-theme-toggle" data-theme-toggle type="button" title="Toggle theme" aria-label="Toggle theme">
+                <svg class="duedeck-theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20.5 14.2A7.8 7.8 0 0 1 9.8 3.5 8.9 8.9 0 1 0 20.5 14.2Z"></path>
+                </svg>
+                <svg class="duedeck-theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2"></path>
+                    <path d="M12 20v2"></path>
+                    <path d="m4.93 4.93 1.41 1.41"></path>
+                    <path d="m17.66 17.66 1.41 1.41"></path>
+                    <path d="M2 12h2"></path>
+                    <path d="M20 12h2"></path>
+                    <path d="m6.34 17.66-1.41 1.41"></path>
+                    <path d="m19.07 4.93-1.41 1.41"></path>
                 </svg>
             </button>
 
-            <button class="duedeck-icon-button" type="button" title="Sync" aria-label="Sync">
+            <button class="duedeck-icon-button" data-view-settings type="button" title="Settings" aria-label="Settings">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.4.16.74.37 1 .6.3.28.48.66.5 1.1V11a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.41 1Z"></path>
+                </svg>
+            </button>
+
+            <button class="duedeck-icon-button" data-sync type="button" title="Sync" aria-label="Sync">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M21 12a9 9 0 0 1-15.4 6.36L3 15.75"></path>
                     <path d="M3 21v-5.25h5.25"></path>
@@ -34,55 +48,208 @@
     </header>
 
     <section class="duedeck-panel__body">
-        <h1 class="duedeck-greeting"></h1>
+        <nav class="duedeck-mode-tabs" aria-label="DueDeck views">
+            <button type="button" data-view-dashboard data-active>Today</button>
+            <button type="button" data-view-week>Week</button>
+            <button type="button" data-view-saved>Saved</button>
+            <button type="button" data-view-settings>Settings</button>
+        </nav>
 
-        <div class="duedeck-stats" aria-label="Assignment stats">
-            <button class="duedeck-stat duedeck-stat--today" type="button" data-stat="today">
-                <span>Due today</span>
-                <strong>–</strong>
-            </button>
-            <button class="duedeck-stat duedeck-stat--overdue" type="button" data-stat="overdue">
-                <span>Overdue</span>
-                <strong>–</strong>
-            </button>
+        <div class="duedeck-view duedeck-view--dashboard" data-view="dashboard">
+            <div class="duedeck-mode-header">
+                <div>
+                    <h1 class="duedeck-greeting"></h1>
+                    <p>What needs attention next</p>
+                </div>
+                <button class="duedeck-small-button" data-open-manual type="button">Quick add</button>
+            </div>
+
+            <section class="duedeck-detection" data-detection hidden aria-label="Detected assignment"></section>
+
+            <div class="duedeck-stats" aria-label="Assignment stats">
+                <button class="duedeck-stat duedeck-stat--today" type="button" data-stat="today">
+                    <span>Due today</span>
+                    <strong>–</strong>
+                </button>
+                <button class="duedeck-stat duedeck-stat--overdue" type="button" data-stat="overdue">
+                    <span>Overdue</span>
+                    <strong>–</strong>
+                </button>
+            </div>
+
+            <section class="duedeck-up-next" aria-labelledby="duedeck-up-next-title">
+                <div class="duedeck-section-heading">
+                    <h3 id="duedeck-up-next-title">Up Next</h3>
+                    <button type="button" data-view-week>View all</button>
+                </div>
+                <div class="duedeck-list" data-up-next-list aria-label="Assignments"></div>
+            </section>
         </div>
 
-        <section class="duedeck-up-next" aria-labelledby="duedeck-up-next-title">
-            <div class="duedeck-section-heading">
-                <h3 id="duedeck-up-next-title">Up Next</h3>
-                <button type="button">View all</button>
+        <div class="duedeck-view duedeck-view--week" data-view="week" hidden>
+            <div class="duedeck-week-header">
+                <button class="duedeck-back-button" data-view-dashboard type="button" aria-label="Back to dashboard">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                </button>
+                <div>
+                    <h3>This Week</h3>
+                    <p data-week-summary>Loading assignments</p>
+                </div>
             </div>
-            <div class="duedeck-list" data-up-next-list aria-label="Assignments"></div>
-        </section>
 
-        <section class="duedeck-next-class" aria-label="Next class">
-            <div>
-                <h3>Next class in 24 min</h3>
-                <p class="duedeck-next-class__course">Calculus I</p>
-                <p class="duedeck-next-class__meta">2:00 PM <span>•</span> Room 304</p>
+            <div class="duedeck-filter-tabs" role="tablist" aria-label="Assignment filter">
+                <button type="button" data-week-filter="all" data-active>All</button>
+                <button type="button" data-week-filter="assignment">Assignments</button>
+                <button type="button" data-week-filter="quiz">Quizzes</button>
+                <button type="button" data-week-filter="discussion">Discussions</button>
             </div>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <path d="M3 10h18"></path>
-                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-            </svg>
-        </section>
+
+            <div class="duedeck-week-list" data-week-list aria-label="This week"></div>
+        </div>
+
+        <div class="duedeck-view duedeck-view--detail" data-view="detail" hidden>
+            <div class="duedeck-week-header">
+                <button class="duedeck-back-button" data-view-dashboard type="button" aria-label="Back to dashboard">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                </button>
+                <div>
+                    <h3>Assignment</h3>
+                    <p>Details, checklist, and reminder</p>
+                </div>
+            </div>
+            <div class="duedeck-detail" data-detail></div>
+        </div>
+
+        <div class="duedeck-view duedeck-view--saved" data-view="saved" hidden>
+            <div class="duedeck-week-header">
+                <button class="duedeck-back-button" data-view-dashboard type="button" aria-label="Back to today">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                </button>
+                <div>
+                    <h3>Saved</h3>
+                    <p>Deadlines you chose to track</p>
+                </div>
+            </div>
+            <div class="duedeck-list" data-saved-list aria-label="Saved assignments"></div>
+        </div>
+
+        <div class="duedeck-view duedeck-view--settings" data-view="settings" hidden>
+            <div class="duedeck-week-header">
+                <button class="duedeck-back-button" data-view-dashboard type="button" aria-label="Back to dashboard">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                </button>
+                <div>
+                    <h3>Settings</h3>
+                    <p>NJIT Canvas sync, reminders, and local data.</p>
+                </div>
+            </div>
+
+            <div class="duedeck-settings" data-settings>
+                <section class="duedeck-settings-card">
+                    <div class="duedeck-account-row">
+                        <div>
+                            <strong>NJIT services</strong>
+                            <span data-canvas-status>Canvas connected</span>
+                            <small>Other NJIT tools can plug into this one connection later.</small>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="duedeck-settings-card">
+                    <h4>NJIT Canvas items</h4>
+                    <label class="duedeck-toggle-row">
+                        <span>Assignments</span>
+                        <input data-sync-pref="assignments" type="checkbox">
+                    </label>
+                    <label class="duedeck-toggle-row">
+                        <span>Quizzes</span>
+                        <input data-sync-pref="quizzes" type="checkbox">
+                    </label>
+                    <label class="duedeck-toggle-row">
+                        <span>Discussions</span>
+                        <input data-sync-pref="discussions" type="checkbox">
+                    </label>
+                </section>
+
+                <section class="duedeck-settings-card">
+                    <h4>Default reminder</h4>
+                    <select class="duedeck-select" data-reminder-offset>
+                        <option value="0">No reminder by default</option>
+                        <option value="1">1 hour before</option>
+                        <option value="3">3 hours before</option>
+                        <option value="24">1 day before</option>
+                        <option value="48">2 days before</option>
+                    </select>
+                </section>
+
+                <section class="duedeck-settings-card">
+                    <h4>Course visibility</h4>
+                    <div class="duedeck-course-list" data-course-visibility></div>
+                </section>
+
+                <section class="duedeck-settings-card">
+                    <h4>Notification preview</h4>
+                    <div class="duedeck-notification-preview">
+                        <strong>DueDeck: CS homework</strong>
+                        <span>NJIT Canvas deadline due tomorrow at 11:59 PM.</span>
+                    </div>
+                </section>
+
+                <section class="duedeck-settings-card">
+                    <h4>Reset</h4>
+                    <button class="duedeck-danger-button" data-reset-onboarding type="button">Show onboarding again</button>
+                    <button class="duedeck-danger-button" data-disconnect-canvas type="button">Disconnect NJIT Canvas data</button>
+                    <button class="duedeck-danger-button" data-clear-data type="button">Clear all DueDeck data</button>
+                </section>
+
+                <section class="duedeck-privacy-callout">
+                    <strong>Your NJIT data stays local.</strong>
+                    <span>DueDeck stores saved deadlines and preferences in Chrome storage on this browser.</span>
+                </section>
+            </div>
+        </div>
+
     </section>
 
-    <footer class="duedeck-panel__footer">
-        <button class="duedeck-week-button" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <path d="M3 10h18"></path>
-                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-            </svg>
-            Open Week View
-        </button>
-    </footer>
+    <div class="duedeck-manual-modal" data-manual-modal hidden aria-label="Add manual task">
+        <form class="duedeck-manual-form" data-manual-form>
+            <div class="duedeck-week-header">
+                <button class="duedeck-back-button" data-close-manual type="button" aria-label="Close manual task form">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+                <div>
+                    <h3>Quick add</h3>
+                    <p>Save a deadline DueDeck cannot read automatically.</p>
+                </div>
+            </div>
+            <p class="duedeck-manual-error" data-manual-error hidden></p>
+            <label>Title <input name="title" required></label>
+            <label>Course <input name="course" data-manual-course></label>
+            <label>Due date and time <input name="dueAt" type="datetime-local"></label>
+            <label>Type
+                <select name="type">
+                    <option value="assignment">Assignment</option>
+                    <option value="quiz">Quiz</option>
+                    <option value="discussion">Discussion</option>
+                </select>
+            </label>
+            <label>Notes <textarea name="description" rows="3"></textarea></label>
+            <button class="duedeck-week-button" type="submit">Save task</button>
+        </form>
+    </div>
 
-    <p class="duedeck-sync-status">Last synced 2 min ago</p>
+    <p class="duedeck-sync-status" data-sync-status>Not synced yet</p>
 
     <span class="duedeck-panel__resize" data-resize-handle aria-hidden="true"></span>
 </aside>

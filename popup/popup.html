@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DueDeck</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="popup" data-app>
+    <header class="popup__header">
+      <div class="brand">
+        <div>
+          <h1>DueDeck</h1>
+          <p data-status>Checking NJIT Canvas...</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="onboarding" data-onboarding hidden>
+      <div class="onboarding__hero">
+        <h2>Know what is due next.</h2>
+        <p>Open NJIT Canvas once, then DueDeck keeps your deadlines close by.</p>
+      </div>
+
+      <div class="feature-list">
+        <p><strong>Today</strong><span>What needs attention now.</span></p>
+        <p><strong>Saved</strong><span>Track the work you care about.</span></p>
+        <p><strong>Quick add</strong><span>Add deadlines NJIT Canvas does not show cleanly.</span></p>
+      </div>
+
+      <div class="button-row">
+        <button class="button button--primary" data-open-canvas type="button">Open NJIT Canvas</button>
+        <button class="button" data-complete-onboarding type="button">I'm on NJIT Canvas</button>
+      </div>
+    </section>
+
+    <section class="dashboard" data-dashboard hidden>
+      <div class="loading-strip" data-loading hidden>
+        <span></span><span></span><span></span>
+      </div>
+
+      <div class="state-card" data-pre-sync hidden>
+        <h2>Visit NJIT Canvas to sync</h2>
+        <p>Open NJIT Canvas while signed in, then DueDeck will pull your assignments into this popup.</p>
+      </div>
+
+      <div class="state-card state-card--warning" data-stale hidden>
+        <h2>Data may be stale</h2>
+        <p data-stale-copy>Last sync was a while ago. Open NJIT Canvas to refresh.</p>
+      </div>
+
+      <div class="state-card state-card--warning" data-sync-error hidden>
+        <h2>Sync needs attention</h2>
+        <p data-sync-error-copy>Open NJIT Canvas and try syncing again.</p>
+      </div>
+
+      <div class="stats" aria-label="Assignment stats" data-synced-content>
+        <div class="stat">
+          <span>Due today</span>
+          <strong data-due-today>0</strong>
+        </div>
+        <div class="stat stat--danger">
+          <span>Overdue</span>
+          <strong data-overdue>0</strong>
+        </div>
+      </div>
+
+      <section class="card" data-synced-content>
+        <div class="section-title">
+          <h2>Up next</h2>
+          <span data-last-synced>Not synced yet</span>
+        </div>
+        <div class="assignment-list" data-up-next></div>
+      </section>
+
+      <section class="next-class">
+        <span class="next-class__icon" aria-hidden="true"></span>
+        <div>
+          <h2>Next class</h2>
+          <p data-next-class></p>
+        </div>
+      </section>
+
+      <div class="button-row button-row--stack">
+        <button class="button button--primary" data-open-panel type="button">Open DueDeck</button>
+        <button class="button" data-open-canvas-secondary type="button">Open NJIT Canvas</button>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

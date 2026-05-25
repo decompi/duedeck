@@ -17,7 +17,7 @@ const STATUS_LABELS = {
 function createTinyBadge(assignment) {
     const badge = document.createElement("span");
     badge.className = "duedeck-triage-badge";
-    badge.style.background = PLATFORM_COLORS[assignment.platformType] ?? "#6d28d9";
+    badge.style.background = PLATFORM_COLORS[assignment.platformType] ?? "#d22630";
     badge.textContent = PLATFORM_INITIALS[assignment.platformType] ?? "?";
     return badge;
 }

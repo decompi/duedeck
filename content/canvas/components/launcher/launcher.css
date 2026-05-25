@@ -5,11 +5,11 @@
   width: 24px;
   height: 150px;
   padding: 0;
-  border: 1px solid rgba(109, 40, 217, 0.2);
+  border: 1px solid rgba(210, 38, 48, 0.22);
   border-right: 0;
   border-radius: 16px 0 0 16px;
-  background: linear-gradient(180deg, #8b5cf6 0%, #4c1d95 100%);
-  box-shadow: 0 18px 44px rgba(49, 46, 129, 0.24);
+  background: linear-gradient(180deg, #d22630 0%, #a6192e 100%);
+  box-shadow: 0 18px 44px rgba(166, 25, 46, 0.22);
   cursor: pointer;
   pointer-events: auto;
   transform: translate(12px, -50%);
@@ -21,7 +21,7 @@
   width: 30px;
   transform: translate(0, -50%);
   outline: none;
-  box-shadow: 0 22px 58px rgba(49, 46, 129, 0.32);
+  box-shadow: 0 22px 58px rgba(166, 25, 46, 0.3);
 }
 
 :host([data-open="true"]) .duedeck-launcher {
