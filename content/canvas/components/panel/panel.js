@@ -673,12 +673,8 @@ export function renderSettings(shadowRoot, { syncPreferences, reminderSettings, 
         }
     }
 
-    const resetOnboarding = shadowRoot.querySelector("[data-reset-onboarding]");
     const disconnectCanvas = shadowRoot.querySelector("[data-disconnect-canvas]");
     const clearData = shadowRoot.querySelector("[data-clear-data]");
-    if (resetOnboarding) {
-        resetOnboarding.onclick = () => callbacks.onResetOnboarding?.();
-    }
     if (disconnectCanvas) {
         disconnectCanvas.onclick = () => callbacks.onDisconnectCanvas?.();
     }

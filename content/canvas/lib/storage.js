@@ -3,7 +3,6 @@ const LEGACY_STORAGE_KEY = "duedeckOverlayLayout";
 const THEME_STORAGE_KEY = "duedeckTheme";
 const SAVED_ASSIGNMENTS_KEY = "duedeckSavedAssignments";
 const REMINDER_SETTINGS_KEY = "duedeckReminderSettings";
-const ONBOARDING_STORAGE_KEY = "duedeckOnboardingComplete";
 const SYNC_PREFERENCES_KEY = "duedeckSyncPreferences";
 const COURSE_VISIBILITY_KEY = "duedeckCourseVisibility";
 const LAST_SYNC_SNAPSHOT_KEY = "duedeckLastSyncSnapshot";
@@ -299,20 +298,6 @@ export function saveReminderSettings(settings) {
     });
 }
 
-export function getOnboardingComplete() {
-    return new Promise((resolve) => {
-        chrome.storage?.local?.get([ONBOARDING_STORAGE_KEY], (result) => {
-            resolve(Boolean(result?.[ONBOARDING_STORAGE_KEY]));
-        });
-    });
-}
-
-export function setOnboardingComplete(complete = true) {
-    return new Promise((resolve) => {
-        chrome.storage?.local?.set({ [ONBOARDING_STORAGE_KEY]: Boolean(complete) }, resolve);
-    });
-}
-
 export function getSyncPreferences() {
     return new Promise((resolve) => {
         chrome.storage?.local?.get([SYNC_PREFERENCES_KEY], (result) => {
@@ -370,7 +355,6 @@ export function clearDueDeckData() {
         THEME_STORAGE_KEY,
         SAVED_ASSIGNMENTS_KEY,
         REMINDER_SETTINGS_KEY,
-        ONBOARDING_STORAGE_KEY,
         SYNC_PREFERENCES_KEY,
         COURSE_VISIBILITY_KEY,
         LAST_SYNC_SNAPSHOT_KEY,

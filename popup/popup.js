@@ -1,5 +1,4 @@
 const KEYS = {
-    onboarding: "duedeckOnboardingComplete",
     snapshot: "duedeckLastSyncSnapshot",
     saved: "duedeckSavedAssignments",
 };
@@ -8,10 +7,6 @@ const CanvasHostPattern = /(njit\.instructure\.com|instructure\.com|canvaslms\.c
 
 function storageGet(keys) {
     return new Promise((resolve) => chrome.storage.local.get(keys, resolve));
-}
-
-function storageSet(values) {
-    return new Promise((resolve) => chrome.storage.local.set(values, resolve));
 }
 
 function isCanvasTab(tab) {
@@ -112,18 +107,7 @@ async function getActiveTab() {
     return tab;
 }
 
-async function completeOnboarding() {
-    await storageSet({ [KEYS.onboarding]: true });
-    const tab = await getActiveTab();
-    if (isCanvasTab(tab)) {
-        await openPanel();
-        return;
-    }
-    await render();
-}
-
 async function openCanvas() {
-    await storageSet({ [KEYS.onboarding]: true });
     chrome.runtime.sendMessage({ type: "DUEDECK_OPEN_CANVAS" });
     window.close();
 }
@@ -134,7 +118,6 @@ async function openPanel() {
         button.disabled = true;
         button.textContent = "Opening...";
     }
-    await storageSet({ [KEYS.onboarding]: true });
     const result = await chrome.runtime.sendMessage({ type: "DUEDECK_OPEN_PANEL" });
     if (result?.ok) {
         window.close();
@@ -153,14 +136,12 @@ async function openPanel() {
 async function render() {
     const [tab, result] = await Promise.all([
         getActiveTab(),
-        storageGet([KEYS.onboarding, KEYS.snapshot, KEYS.saved]),
+        storageGet([KEYS.snapshot, KEYS.saved]),
     ]);
 
-    const onboardingComplete = Boolean(result?.[KEYS.onboarding]);
     const snapshot = result?.[KEYS.snapshot] ?? {};
     const isCanvas = isCanvasTab(tab);
     const status = document.querySelector("[data-status]");
-    const onboarding = document.querySelector("[data-onboarding]");
     const dashboard = document.querySelector("[data-dashboard]");
     const loading = document.querySelector("[data-loading]");
     const preSync = document.querySelector("[data-pre-sync]");
@@ -178,13 +159,6 @@ async function render() {
                 : "Open NJIT Canvas to sync";
     }
 
-    if (!onboardingComplete) {
-        onboarding.hidden = false;
-        dashboard.hidden = true;
-        return;
-    }
-
-    onboarding.hidden = true;
     dashboard.hidden = false;
     loading.hidden = false;
     window.setTimeout(() => {
@@ -219,8 +193,6 @@ async function render() {
 }
 
 document.querySelector("[data-open-panel]")?.addEventListener("click", openPanel);
-document.querySelector("[data-complete-onboarding]")?.addEventListener("click", completeOnboarding);
-document.querySelector("[data-open-canvas]")?.addEventListener("click", openCanvas);
 document.querySelector("[data-open-canvas-secondary]")?.addEventListener("click", openCanvas);
 
 render().catch((error) => {

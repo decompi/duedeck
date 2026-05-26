@@ -47,8 +47,6 @@ button {
 
 .brand h1,
 .brand p,
-.onboarding h2,
-.onboarding p,
 .card h2,
 .next-class h2,
 .next-class p {
@@ -79,7 +77,6 @@ button {
   font-size: 12px;
 }
 
-.onboarding,
 .dashboard {
   display: grid;
   gap: 12px;
@@ -87,49 +84,6 @@ button {
 
 [hidden] {
   display: none !important;
-}
-
-.onboarding__hero {
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: #fff;
-  text-align: left;
-}
-
-.onboarding h2 {
-  font-size: 18px;
-  letter-spacing: 0;
-}
-
-.onboarding__hero p {
-  margin-top: 7px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.feature-list {
-  display: grid;
-  gap: 8px;
-}
-
-.feature-list p {
-  display: grid;
-  gap: 2px;
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: var(--surface);
-}
-
-.feature-list strong {
-  font-size: 13px;
-}
-
-.feature-list span {
-  color: var(--muted);
-  font-size: 12px;
 }
 
 .stats {

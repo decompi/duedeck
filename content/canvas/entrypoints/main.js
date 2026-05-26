@@ -21,7 +21,6 @@ import {
     saveLastSyncSnapshot,
     saveReminderSettings,
     saveSyncPreferences,
-    setOnboardingComplete,
     clearDueDeckData,
     markAssignmentDone,
     saveThemePreference,
@@ -627,10 +626,6 @@ async function mountDueDeckCanvasPanel() {
             courseVisibility = next;
             await saveCourseVisibility(courseVisibility);
             await refreshData();
-        },
-        onResetOnboarding: async () => {
-            await setOnboardingComplete(false);
-            setSyncStatus(shadowRoot, "Onboarding will show in the popup next time.");
         },
         onDisconnectCanvas: async () => {
             await saveLastSyncSnapshot({
